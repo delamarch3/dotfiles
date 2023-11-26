@@ -1,30 +1,5 @@
-vim.cmd([[
-    filetype plugin indent on
-
-    set termguicolors
-
-    " LSP diagnostic icon in gutter:
-    set signcolumn=yes
-
-    " Vim commands copy to clipboard
-    set clipboard=unnamed
-    set noshowmode
-
-    " Split onto new pane
-    set splitright
-    set splitbelow
-
-    set guicursor=i-ci:ver25-iCursor-blinkwait200-blinkon200-blinkoff150,r-cr-o:hor20
-
-    " Disable adding comment on new line
-    autocmd FileType * set formatoptions-=ro
-
-    " Ruler
-    set cc=100
-
-    set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
-    set number
-]])
+local home_dir = os.getenv("HOME")
+package.path = home_dir .. "/.config/nvim/" .. package.path
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -58,7 +33,21 @@ require("lazy").setup({
     "christoomey/vim-tmux-navigator", -- Maps <C-w>l to <C-l> etc
 })
 
--- Key maps
+-- Options
+vim.opt.termguicolors = true
+vim.opt.signcolumn = 'yes' -- Gutter signs
+vim.opt.clipboard = 'unnamed' -- Copy to clipboard
+vim.opt.showmode = false
+vim.opt.splitright = true -- Split onto new pane
+vim.opt.splitbelow = true
+vim.opt.guicursor = 'i-ci:ver25-iCursor-blinkwait200-blinkon200-blinkoff150,r-cr-o:hor20'
+vim.opt.cc = '100' -- Ruler
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 0
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 4
+vim.opt.smarttab = true
+vim.opt.number = true
 vim.g.mapleader = ' '
 
 -- Close brackets automatically, with return:
@@ -86,6 +75,11 @@ vim.keymap.set('n', '<leader>/', '<cmd>Telescope live_grep<cr>', { remap = false
 vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', { remap = false })
 vim.keymap.set('n', 'gi', '<cmd>Telescope lsp_implementations<cr>', { remap = false })
 vim.keymap.set('n', 'gtd', '<cmd>Telescope lsp_type_definitions<cr>', { remap = false })
+
+-- Diagnostics
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
+vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
 
 -- TODO: move these inside theme
 vim.cmd([[
@@ -158,10 +152,49 @@ vim.api.nvim_create_autocmd({ 'BufLeave', 'FocusLost', 'InsertEnter', 'WinLeave'
     command = 'if &nu | set nornu | endif'
 })
 
-local home_dir = os.getenv("HOME")
-package.path = home_dir .. "/.config/nvim/" .. package.path
-local lualine_theme = require"themes.lualine"
+-- Disable creating comments on new lines
+vim.api.nvim_create_autocmd({ 'FileType' }, {
+    pattern = '*',
+    command = 'set formatoptions-=ro'
+})
 
+-- Weird cursor jumping with luasnip
+vim.api.nvim_create_autocmd('ModeChanged', {
+  pattern = '*',
+  callback = function()
+    if ((vim.v.event.old_mode == 's' and vim.v.event.new_mode == 'n') or vim.v.event.old_mode == 'i')
+        and require('luasnip').session.current_nodes[vim.api.nvim_get_current_buf()]
+        and not require('luasnip').session.jump_active
+    then
+      require('luasnip').unlink_current()
+    end
+  end
+})
+
+-- Format on save
+local format_sync_grp = vim.api.nvim_create_augroup("Format", {})
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.rs,*.go,*.tf,*.c,*.h,*.cpp,*.hs",
+  callback = function()
+    vim.lsp.buf.format({ timeout_ms = 200 })
+  end,
+  group = format_sync_grp,
+})
+
+vim.diagnostic.config({
+  virtual_text = false,
+  underline = true,
+  severity_sort = true,
+})
+
+-- Prioritise LSP hover over diagnostics:
+function hover_fixed()
+    vim.api.nvim_command("set eventignore=CursorHold")
+    vim.lsp.buf.hover()
+    vim.api.nvim_command('autocmd CursorMoved <buffer> ++once set eventignore=""')
+end
+
+local lualine_theme = require"themes.lualine"
 require("lualine").setup {
     options = {
         theme  = lualine_theme,
@@ -171,18 +204,10 @@ require("lualine").setup {
     sections = {
         lualine_b = {
             "branch", "diff",
-            {
-                "diagnostics",
-                symbols = {error = '⏺ ', warn = '⏺ ', info = '⏺ ', hint = '⏺ '},
-            }
+            { "diagnostics", symbols = { error = '⏺ ', warn = '⏺ ', info = '⏺ ', hint = '⏺ ' } }
         },
-        lualine_c = {
-            {
-                "filename",
-                path = 1,
-            }
-        },
-        lualine_x = {'encoding', 'filetype'},
+        lualine_c = { { "filename", path = 1 } },
+        lualine_x = { "encoding", "filetype" },
     }
 }
 require"fidget".setup {}
@@ -198,12 +223,8 @@ require("Comment").setup {
 }
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = {
-      "c", "cpp", "lua", "vim", "rust",
-      "go", "terraform", "hcl", "typescript",
-      "javascript", "json", "yaml", "python",
-      "vue", "tlaplus", "haskell", "ocaml"
-      },
+  ensure_installed = { "c", "cpp", "lua", "vim", "rust", "go", "terraform", "hcl", "typescript",
+      "javascript", "json", "yaml", "python", "vue", "tlaplus", "haskell", "ocaml" },
   sync_install = false,
   auto_install = false,
   ignore_install = {},
@@ -289,23 +310,6 @@ require("gitsigns").setup({
         untracked    = { text = "▏" },
     },
 })
-
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
-vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
-
-vim.diagnostic.config({
-  virtual_text = false,
-  underline = true,
-  severity_sort = true,
-})
-
--- Prioritise LSP hover over diagnostics:
-function hover_fixed()
-    vim.api.nvim_command("set eventignore=CursorHold")
-    vim.lsp.buf.hover()
-    vim.api.nvim_command('autocmd CursorMoved <buffer> ++once set eventignore=""')
-end
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("UserLspConfig", {}),
@@ -393,24 +397,3 @@ cmp.setup {
     { name = "luasnip" },
   },
 }
-
-vim.api.nvim_create_autocmd('ModeChanged', {
-  pattern = '*',
-  callback = function()
-    if ((vim.v.event.old_mode == 's' and vim.v.event.new_mode == 'n') or vim.v.event.old_mode == 'i')
-        and require('luasnip').session.current_nodes[vim.api.nvim_get_current_buf()]
-        and not require('luasnip').session.jump_active
-    then
-      require('luasnip').unlink_current()
-    end
-  end
-})
-
-local format_sync_grp = vim.api.nvim_create_augroup("Format", {})
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*.rs,*.go,*.tf,*.c,*.h,*.cpp,*.hs",
-  callback = function()
-    vim.lsp.buf.format({ timeout_ms = 200 })
-  end,
-  group = format_sync_grp,
-})
