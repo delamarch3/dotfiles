@@ -21,11 +21,6 @@ autocmd FileType * set formatoptions-=ro
 " Ruler
 set cc=100
 
-" Close brackets automatically, with return
-inoremap {<cr> {<cr>}<C-O><S-O>
-inoremap (<cr> (<cr>)<c-o><s-o>
-inoremap [<cr> [<cr>]<c-o><s-o>
-
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 set number
 
@@ -63,31 +58,37 @@ require("lazy").setup({
 })
 EOF
 
-nnoremap <SPACE> <Nop>
-let mapleader=" "
-
-nnoremap <C-f> <Nop>
-nnoremap <leader>f <cmd>Telescope find_files<cr>
-nnoremap <leader>b <cmd>Telescope buffers <cr>
-nnoremap <leader>s <cmd>Telescope lsp_document_symbols<cr>
-nnoremap <leader>S <cmd>Telescope lsp_workspace_symbols<cr>
-nnoremap <leader>d <cmd>Telescope diagnostics bufnr=0<cr>
-nnoremap <leader>D <cmd>Telescope diagnostics<cr>
-nnoremap <leader>/ <cmd>Telescope live_grep<cr>
-nnoremap gr <cmd>Telescope lsp_references<cr>
-nnoremap gi <cmd>Telescope lsp_implementations<cr>
-nnoremap gtd <cmd>Telescope lsp_type_definitions<cr>
-
-vnoremap S <Nop>
-nnoremap <C-c> <Nop>
-noremap Q <Nop>
-noremap q <Nop>
-vnoremap <C-f> <Nop>
-
-" Use C-l to switch to right pane in netrw
-nmap <leader><leader>l <Plug>NetrwRefresh
-
 lua <<EOF
+
+-- Key maps
+vim.g.mapleader = ' '
+
+-- Close brackets automatically, with return:
+vim.keymap.set('i', '{<cr>', '{<cr>}<C-O><S-O>', { remap = false })
+vim.keymap.set('i', '(<cr>', '(<cr>)<c-o><s-o>', { remap = false })
+vim.keymap.set('i', '[<cr>', '[<cr>]<c-o><s-o>', { remap = false })
+
+-- Nops
+vim.keymap.set('n', '<SPACE>', '<Nop>', { remap = false })
+vim.keymap.set('n', '<C-f>', '<Nop>', { remap = false })
+vim.keymap.set('n', '<C-c>', '<Nop>', { remap = false })
+vim.keymap.set('', 'Q', '<Nop>', { remap = false })
+vim.keymap.set('', 'q', '<Nop>', { remap = false })
+vim.keymap.set('v', '<C-f>', '<Nop>', { remap = false })
+vim.keymap.set('n', '<leader><leader>l', '<Plug>NetrwRefresh', { remap = true })
+
+-- Telescope
+vim.keymap.set('n', '<leader>f', '<cmd>Telescope find_files<cr>', { remap = false })
+vim.keymap.set('n', '<leader>b', '<cmd>Telescope buffers <cr>', { remap = false })
+vim.keymap.set('n', '<leader>s', '<cmd>Telescope lsp_document_symbols<cr>', { remap = false })
+vim.keymap.set('n', '<leader>S', '<cmd>Telescope lsp_workspace_symbols<cr>', { remap = false })
+vim.keymap.set('n', '<leader>d', '<cmd>Telescope diagnostics bufnr=0<cr>', { remap = false })
+vim.keymap.set('n', '<leader>D', '<cmd>Telescope diagnostics<cr>', { remap = false })
+vim.keymap.set('n', '<leader>/', '<cmd>Telescope live_grep<cr>', { remap = false })
+vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', { remap = false })
+vim.keymap.set('n', 'gi', '<cmd>Telescope lsp_implementations<cr>', { remap = false })
+vim.keymap.set('n', 'gtd', '<cmd>Telescope lsp_type_definitions<cr>', { remap = false })
+
 -- TODO: move these inside theme
 vim.cmd([[
     colorscheme darcula
