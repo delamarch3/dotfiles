@@ -1,0 +1,3 @@
+```
+stow -Sv <directory>
+```

@@ -1,0 +1,9 @@
+command alias bfl breakpoint set -f %1 -l %2
+command alias bn breakpoint set -n %1
+command alias bls breakpoint list
+command alias step-in thread step-in
+command alias step-inst thread step-inst
+command alias step-inst-over thread step-inst-over
+command alias step-out thread step-out
+command alias step-over thread step-over
+command alias step-scripted thread step-scripted
