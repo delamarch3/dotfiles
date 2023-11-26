@@ -28,11 +28,6 @@ inoremap [<cr> [<cr>]<c-o><s-o>
 
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 set number
-augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
-  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
-augroup END
 
 lua <<EOF
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -68,24 +63,6 @@ require("lazy").setup({
 })
 EOF
 
-" TODO: move these inside theme
-colorscheme darcula
-hi Normal guibg=#232525
-hi Delimiter guifg=#a9b7c6
-hi Type guifg=#a9b7c6 gui=NONE
-hi Boolean guifg=#6897bb
-hi PreProc guifg=#cc7832
-hi LineNr guibg=#2b2b2b guifg=#808080
-hi Search guibg=#214283
-hi TelescopeMatching guifg=#d8d8d8
-hi StorageClass guifg=#cc7832
-hi Operator guifg=#a9b7c6
-hi DiffAdd guibg=#2b2b2b guifg=#32cd32
-hi DiffChange guibg=#2b2b2b guifg=#808080
-hi DiffDelete guibg=#2b2b2b guifg=#ff0000
-hi SignColumn guibg=#2b2b2b
-hi ColorColumn guibg=#2b2b2b
-
 nnoremap <SPACE> <Nop>
 let mapleader=" "
 
@@ -120,9 +97,27 @@ sign define DiagnosticSignWarn text=⏺ texthl=DiagnosticSignWarn linehl= numhl=
 sign define DiagnosticSignInfo text=⏺ texthl=DiagnosticSignInfo linehl= numhl=
 sign define DiagnosticSignHint text=⏺ texthl=DiagnosticSignHint linehl= numhl=
 
-highlight ExtraWhitespace ctermbg=131 guibg=#bc3f3c
-
 lua <<EOF
+-- TODO: move these inside theme
+vim.cmd([[
+    colorscheme darcula
+    hi Normal guibg=#232525
+    hi Delimiter guifg=#a9b7c6
+    hi Type guifg=#a9b7c6 gui=NONE
+    hi Boolean guifg=#6897bb
+    hi PreProc guifg=#cc7832
+    hi LineNr guibg=#2b2b2b guifg=#808080
+    hi Search guibg=#214283
+    hi TelescopeMatching guifg=#d8d8d8
+    hi StorageClass guifg=#cc7832
+    hi Operator guifg=#a9b7c6
+    hi DiffAdd guibg=#2b2b2b guifg=#32cd32
+    hi DiffChange guibg=#2b2b2b guifg=#808080
+    hi DiffDelete guibg=#2b2b2b guifg=#ff0000
+    hi SignColumn guibg=#2b2b2b
+    hi ColorColumn guibg=#2b2b2b
+    hi ExtraWhitespace ctermbg=131 guibg=#bc3f3c
+]])
 
 -- Highlight trailing whitespace
 local hlwhitespace = vim.api.nvim_create_augroup('hlwhitespace', { clear = true })
@@ -145,6 +140,19 @@ vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
     pattern = '*',
     group = hlwhitespace,
     command = 'call clearmatches()'
+})
+
+-- Number toggle
+local numbertoggle = vim.api.nvim_create_augroup('numbertoggle', { clear = true })
+vim.api.nvim_create_autocmd({ 'BufEnter', 'FocusGained', 'InsertLeave', 'WinEnter' }, {
+    pattern = '*',
+    group = numbertoggle,
+    command = 'if &nu && mode() != "i" | set rnu | endif'
+})
+vim.api.nvim_create_autocmd({ 'BufLeave', 'FocusLost', 'InsertEnter', 'WinLeave' }, {
+    pattern = '*',
+    group = numbertoggle,
+    command = 'if &nu | set nornu | endif'
 })
 
 EOF
