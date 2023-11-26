@@ -69,7 +69,7 @@ require("lazy").setup({
 EOF
 
 " TODO: move these inside theme
-colorscheme darcula 
+colorscheme darcula
 hi Normal guibg=#232525
 hi Delimiter guifg=#a9b7c6
 hi Type guifg=#a9b7c6 gui=NONE
@@ -121,10 +121,33 @@ sign define DiagnosticSignInfo text=⏺ texthl=DiagnosticSignInfo linehl= numhl=
 sign define DiagnosticSignHint text=⏺ texthl=DiagnosticSignHint linehl= numhl=
 
 highlight ExtraWhitespace ctermbg=131 guibg=#bc3f3c
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
+
+lua <<EOF
+
+-- Highlight trailing whitespace
+local hlwhitespace = vim.api.nvim_create_augroup('hlwhitespace', { clear = true })
+vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
+    pattern = '*',
+    group = hlwhitespace,
+    command = [[match ExtraWhitespace /\s\+$/]]
+})
+vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
+    pattern = '*',
+    group = hlwhitespace,
+    command = [[match ExtraWhitespace /\s\+\%#\@<!$/]]
+})
+vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
+    pattern = '*',
+    group = hlwhitespace,
+    command = [[match ExtraWhitespace /\s\+$/]]
+})
+vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
+    pattern = '*',
+    group = hlwhitespace,
+    command = 'call clearmatches()'
+})
+
+EOF
 
 lua <<EOF
 local home_dir = os.getenv("HOME")
@@ -147,7 +170,7 @@ require("lualine").setup {
         },
         lualine_c = {
             {
-                "filename", 
+                "filename",
                 path = 1,
             }
         },
