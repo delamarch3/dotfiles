@@ -121,9 +121,9 @@ sign define DiagnosticSignInfo text=⏺ texthl=DiagnosticSignInfo linehl= numhl=
 sign define DiagnosticSignHint text=⏺ texthl=DiagnosticSignHint linehl= numhl=
 
 highlight ExtraWhitespace ctermbg=131 guibg=#bc3f3c
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/ 
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/ 
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/ 
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
 lua <<EOF
@@ -132,9 +132,9 @@ package.path = home_dir .. "/.config/nvim/" .. package.path
 local lualine_theme = require"themes.lualine"
 
 require("lualine").setup {
-    options = { 
+    options = {
         theme  = lualine_theme,
-        section_separators = "", 
+        section_separators = "",
         component_separators = "|",
     },
     sections = {
@@ -167,11 +167,11 @@ require("Comment").setup {
 }
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = { 
-      "c", "cpp", "lua", "vim", "rust", 
-      "go", "terraform", "hcl", "typescript", 
-      "javascript", "json", "yaml", "python", 
-      "vue", "tlaplus", "haskell", "ocaml" 
+  ensure_installed = {
+      "c", "cpp", "lua", "vim", "rust",
+      "go", "terraform", "hcl", "typescript",
+      "javascript", "json", "yaml", "python",
+      "vue", "tlaplus", "haskell", "ocaml"
       },
   sync_install = false,
   auto_install = false,
