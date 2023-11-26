@@ -87,11 +87,6 @@ vnoremap <C-f> <Nop>
 " Use C-l to switch to right pane in netrw
 nmap <leader><leader>l <Plug>NetrwRefresh
 
-command! BufDeleteOthers %bd|e#
-cnoreabbrev bdo BufDeleteOthers
-command! BufDeleteAll %bd
-cnoreabbrev bda BufDeleteAll
-
 sign define DiagnosticSignError text=⏺ texthl=DiagnosticSignError linehl= numhl=
 sign define DiagnosticSignWarn text=⏺ texthl=DiagnosticSignWarn linehl= numhl=
 sign define DiagnosticSignInfo text=⏺ texthl=DiagnosticSignInfo linehl= numhl=
@@ -117,6 +112,14 @@ vim.cmd([[
     hi SignColumn guibg=#2b2b2b
     hi ColorColumn guibg=#2b2b2b
     hi ExtraWhitespace ctermbg=131 guibg=#bc3f3c
+]])
+
+-- User commands
+vim.api.nvim_create_user_command('BufDeleteOthers', '%bd|e#', {})
+vim.api.nvim_create_user_command('BufDeleteAll', '%bd', {})
+vim.cmd([[
+    cnoreabbrev bdo BufDeleteOthers
+    cnoreabbrev bda BufDeleteAll
 ]])
 
 -- Highlight trailing whitespace
