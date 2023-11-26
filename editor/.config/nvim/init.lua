@@ -1,30 +1,31 @@
-filetype plugin indent on
+vim.cmd([[
+    filetype plugin indent on
 
-set termguicolors
+    set termguicolors
 
-" LSP diagnostic icon in gutter:
-set signcolumn=yes
+    " LSP diagnostic icon in gutter:
+    set signcolumn=yes
 
-" Vim commands copy to clipboard
-set clipboard=unnamed
-set noshowmode
+    " Vim commands copy to clipboard
+    set clipboard=unnamed
+    set noshowmode
 
-" Split onto new pane
-set splitright
-set splitbelow
+    " Split onto new pane
+    set splitright
+    set splitbelow
 
-set guicursor=i-ci:ver25-iCursor-blinkwait200-blinkon200-blinkoff150,r-cr-o:hor20
+    set guicursor=i-ci:ver25-iCursor-blinkwait200-blinkon200-blinkoff150,r-cr-o:hor20
 
-" Disable adding comment on new line
-autocmd FileType * set formatoptions-=ro
+    " Disable adding comment on new line
+    autocmd FileType * set formatoptions-=ro
 
-" Ruler
-set cc=100
+    " Ruler
+    set cc=100
 
-set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
-set number
+    set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
+    set number
+]])
 
-lua <<EOF
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -56,9 +57,6 @@ require("lazy").setup({
     "numToStr/Comment.nvim",
     "christoomey/vim-tmux-navigator", -- Maps <C-w>l to <C-l> etc
 })
-EOF
-
-lua <<EOF
 
 -- Key maps
 vim.g.mapleader = ' '
@@ -113,8 +111,8 @@ vim.cmd([[
 -- Signs
 vim.fn.sign_define('DiagnosticSignError', {texthl = 'DiagnosticSignError', text = '⏺' })
 vim.fn.sign_define('DiagnosticSignWarn', {texthl = 'DiagnosticSignWarn', text = '⏺' })
-vim.fn.sign_define('DiagnosticSignWarn', {texthl = 'DiagnosticSignWarn', text = '⏺' })
-vim.fn.sign_define('DiagnosticSignWarn', {texthl = 'DiagnosticSignWarn', text = '⏺' })
+vim.fn.sign_define('DiagnosticSignInfo', {texthl = 'DiagnosticSignInfo', text = '⏺' })
+vim.fn.sign_define('DiagnosticSignHint', {texthl = 'DiagnosticSignHint', text = '⏺' })
 
 -- User commands
 vim.api.nvim_create_user_command('BufDeleteOthers', '%bd|e#', {})
@@ -160,9 +158,6 @@ vim.api.nvim_create_autocmd({ 'BufLeave', 'FocusLost', 'InsertEnter', 'WinLeave'
     command = 'if &nu | set nornu | endif'
 })
 
-EOF
-
-lua <<EOF
 local home_dir = os.getenv("HOME")
 package.path = home_dir .. "/.config/nvim/" .. package.path
 local lualine_theme = require"themes.lualine"
@@ -419,4 +414,3 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
   group = format_sync_grp,
 })
-EOF
