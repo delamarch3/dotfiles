@@ -35,46 +35,46 @@ require("lazy").setup({
 
 -- Options
 vim.opt.termguicolors = true
-vim.opt.signcolumn = 'yes' -- Gutter signs
-vim.opt.clipboard = 'unnamed' -- Copy to clipboard
+vim.opt.signcolumn = "yes" -- Gutter signs
+vim.opt.clipboard = "unnamed" -- Copy to clipboard
 vim.opt.showmode = false
 vim.opt.splitright = true -- Split onto new pane
 vim.opt.splitbelow = true
-vim.opt.guicursor = 'i-ci:ver25-iCursor-blinkwait200-blinkon200-blinkoff150,r-cr-o:hor20'
-vim.opt.cc = '100' -- Ruler
+vim.opt.guicursor = "i-ci:ver25-iCursor-blinkwait200-blinkon200-blinkoff150,r-cr-o:hor20"
+vim.opt.cc = "100" -- Ruler
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 0
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
 vim.opt.smarttab = true
 vim.opt.number = true
-vim.g.mapleader = ' '
+vim.g.mapleader = " "
 
 -- Close brackets automatically, with return:
-vim.keymap.set('i', '{<cr>', '{<cr>}<C-O><S-O>', { remap = false })
-vim.keymap.set('i', '(<cr>', '(<cr>)<c-o><s-o>', { remap = false })
-vim.keymap.set('i', '[<cr>', '[<cr>]<c-o><s-o>', { remap = false })
+vim.keymap.set("i", "{<cr>", "{<cr>}<C-O><S-O>", { remap = false })
+vim.keymap.set("i", "(<cr>", "(<cr>)<c-o><s-o>", { remap = false })
+vim.keymap.set("i", "[<cr>", "[<cr>]<c-o><s-o>", { remap = false })
 
 -- Nops
-vim.keymap.set('n', '<SPACE>', '<Nop>', { remap = false })
-vim.keymap.set('n', '<C-f>', '<Nop>', { remap = false })
-vim.keymap.set('n', '<C-c>', '<Nop>', { remap = false })
-vim.keymap.set('', 'Q', '<Nop>', { remap = false })
-vim.keymap.set('', 'q', '<Nop>', { remap = false })
-vim.keymap.set('v', '<C-f>', '<Nop>', { remap = false })
-vim.keymap.set('n', '<leader><leader>l', '<Plug>NetrwRefresh', { remap = true })
+vim.keymap.set("n", "<SPACE>", "<Nop>", { remap = false })
+vim.keymap.set("n", "<C-f>", "<Nop>", { remap = false })
+vim.keymap.set("n", "<C-c>", "<Nop>", { remap = false })
+vim.keymap.set("", "Q", "<Nop>", { remap = false })
+vim.keymap.set("", "q", "<Nop>", { remap = false })
+vim.keymap.set("v", "<C-f>", "<Nop>", { remap = false })
+vim.keymap.set("n", "<leader><leader>l", "<Plug>NetrwRefresh", { remap = true })
 
 -- Telescope
-vim.keymap.set('n', '<leader>f', '<cmd>Telescope find_files<cr>', { remap = false })
-vim.keymap.set('n', '<leader>b', '<cmd>Telescope buffers <cr>', { remap = false })
-vim.keymap.set('n', '<leader>s', '<cmd>Telescope lsp_document_symbols<cr>', { remap = false })
-vim.keymap.set('n', '<leader>S', '<cmd>Telescope lsp_workspace_symbols<cr>', { remap = false })
-vim.keymap.set('n', '<leader>d', '<cmd>Telescope diagnostics bufnr=0<cr>', { remap = false })
-vim.keymap.set('n', '<leader>D', '<cmd>Telescope diagnostics<cr>', { remap = false })
-vim.keymap.set('n', '<leader>/', '<cmd>Telescope live_grep<cr>', { remap = false })
-vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', { remap = false })
-vim.keymap.set('n', 'gi', '<cmd>Telescope lsp_implementations<cr>', { remap = false })
-vim.keymap.set('n', 'gtd', '<cmd>Telescope lsp_type_definitions<cr>', { remap = false })
+vim.keymap.set("n", "<leader>f", "<cmd>Telescope find_files<cr>", { remap = false })
+vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers <cr>", { remap = false })
+vim.keymap.set("n", "<leader>s", "<cmd>Telescope lsp_document_symbols<cr>", { remap = false })
+vim.keymap.set("n", "<leader>S", "<cmd>Telescope lsp_workspace_symbols<cr>", { remap = false })
+vim.keymap.set("n", "<leader>d", "<cmd>Telescope diagnostics bufnr=0<cr>", { remap = false })
+vim.keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", { remap = false })
+vim.keymap.set("n", "<leader>/", "<cmd>Telescope live_grep<cr>", { remap = false })
+vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", { remap = false })
+vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<cr>", { remap = false })
+vim.keymap.set("n", "gtd", "<cmd>Telescope lsp_type_definitions<cr>", { remap = false })
 
 -- Diagnostics
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
@@ -103,70 +103,70 @@ vim.cmd([[
 ]])
 
 -- Signs
-vim.fn.sign_define('DiagnosticSignError', {texthl = 'DiagnosticSignError', text = '⏺' })
-vim.fn.sign_define('DiagnosticSignWarn', {texthl = 'DiagnosticSignWarn', text = '⏺' })
-vim.fn.sign_define('DiagnosticSignInfo', {texthl = 'DiagnosticSignInfo', text = '⏺' })
-vim.fn.sign_define('DiagnosticSignHint', {texthl = 'DiagnosticSignHint', text = '⏺' })
+vim.fn.sign_define("DiagnosticSignError", {texthl = "DiagnosticSignError", text = "⏺" })
+vim.fn.sign_define("DiagnosticSignWarn", {texthl = "DiagnosticSignWarn", text = "⏺" })
+vim.fn.sign_define("DiagnosticSignInfo", {texthl = "DiagnosticSignInfo", text = "⏺" })
+vim.fn.sign_define("DiagnosticSignHint", {texthl = "DiagnosticSignHint", text = "⏺" })
 
 -- User commands
-vim.api.nvim_create_user_command('BufDeleteOthers', '%bd|e#', {})
-vim.api.nvim_create_user_command('BufDeleteAll', '%bd', {})
+vim.api.nvim_create_user_command("BufDeleteOthers", "%bd|e#", {})
+vim.api.nvim_create_user_command("BufDeleteAll", "%bd", {})
 vim.cmd([[
     cnoreabbrev bdo BufDeleteOthers
     cnoreabbrev bda BufDeleteAll
 ]])
 
 -- Highlight trailing whitespace
-local hlwhitespace = vim.api.nvim_create_augroup('hlwhitespace', { clear = true })
-vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
-    pattern = '*',
+local hlwhitespace = vim.api.nvim_create_augroup("hlwhitespace", { clear = true })
+vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+    pattern = "*",
     group = hlwhitespace,
     command = [[match ExtraWhitespace /\s\+$/]]
 })
-vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
-    pattern = '*',
+vim.api.nvim_create_autocmd({ "InsertEnter" }, {
+    pattern = "*",
     group = hlwhitespace,
     command = [[match ExtraWhitespace /\s\+\%#\@<!$/]]
 })
-vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
-    pattern = '*',
+vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+    pattern = "*",
     group = hlwhitespace,
     command = [[match ExtraWhitespace /\s\+$/]]
 })
-vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
-    pattern = '*',
+vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
+    pattern = "*",
     group = hlwhitespace,
-    command = 'call clearmatches()'
+    command = "call clearmatches()"
 })
 
 -- Number toggle
-local numbertoggle = vim.api.nvim_create_augroup('numbertoggle', { clear = true })
-vim.api.nvim_create_autocmd({ 'BufEnter', 'FocusGained', 'InsertLeave', 'WinEnter' }, {
-    pattern = '*',
+local numbertoggle = vim.api.nvim_create_augroup("numbertoggle", { clear = true })
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "WinEnter" }, {
+    pattern = "*",
     group = numbertoggle,
-    command = 'if &nu && mode() != "i" | set rnu | endif'
+    command = "if &nu && mode() != 'i' | set rnu | endif"
 })
-vim.api.nvim_create_autocmd({ 'BufLeave', 'FocusLost', 'InsertEnter', 'WinLeave' }, {
-    pattern = '*',
+vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "WinLeave" }, {
+    pattern = "*",
     group = numbertoggle,
-    command = 'if &nu | set nornu | endif'
+    command = "if &nu | set nornu | endif"
 })
 
 -- Disable creating comments on new lines
-vim.api.nvim_create_autocmd({ 'FileType' }, {
-    pattern = '*',
-    command = 'set formatoptions-=ro'
+vim.api.nvim_create_autocmd({ "FileType" }, {
+    pattern = "*",
+    command = "set formatoptions-=ro"
 })
 
 -- Weird cursor jumping with luasnip
-vim.api.nvim_create_autocmd('ModeChanged', {
-  pattern = '*',
+vim.api.nvim_create_autocmd("ModeChanged", {
+  pattern = "*",
   callback = function()
-    if ((vim.v.event.old_mode == 's' and vim.v.event.new_mode == 'n') or vim.v.event.old_mode == 'i')
-        and require('luasnip').session.current_nodes[vim.api.nvim_get_current_buf()]
-        and not require('luasnip').session.jump_active
+    if ((vim.v.event.old_mode == "s" and vim.v.event.new_mode == "n") or vim.v.event.old_mode == "i")
+        and require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
+        and not require("luasnip").session.jump_active
     then
-      require('luasnip').unlink_current()
+      require("luasnip").unlink_current()
     end
   end
 })
@@ -204,7 +204,7 @@ require("lualine").setup {
     sections = {
         lualine_b = {
             "branch", "diff",
-            { "diagnostics", symbols = { error = '⏺ ', warn = '⏺ ', info = '⏺ ', hint = '⏺ ' } }
+            { "diagnostics", symbols = { error = "⏺ ", warn = "⏺ ", info = "⏺ ", hint = "⏺ " } }
         },
         lualine_c = { { "filename", path = 1 } },
         lualine_x = { "encoding", "filetype" },
@@ -222,7 +222,7 @@ require("Comment").setup {
     post_hook = nil,
 }
 
-require'nvim-treesitter.configs'.setup {
+require"nvim-treesitter.configs".setup {
   ensure_installed = { "c", "cpp", "lua", "vim", "rust", "go", "terraform", "hcl", "typescript",
       "javascript", "json", "yaml", "python", "vue", "tlaplus", "haskell", "ocaml" },
   sync_install = false,
@@ -233,7 +233,7 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 
-require'nvim-treesitter.configs'.setup {
+require"nvim-treesitter.configs".setup {
   textobjects = {
     select = {
       enable = true,
@@ -347,10 +347,10 @@ lspconfig["tsserver"].setup {
     end,
 }
 
-local is_npm_package_installed = require('util').is_npm_package_installed
+local is_npm_package_installed = require("util").is_npm_package_installed
 lspconfig["volar"].setup {
     capabilities = capabilities,
-    filetypes = is_npm_package_installed 'vue' and { 'vue', 'typescript', 'javascript' } or { 'vue' },
+    filetypes = is_npm_package_installed "vue" and { "vue", "typescript", "javascript" } or { "vue" },
 }
 
 local luasnip = require "luasnip"
