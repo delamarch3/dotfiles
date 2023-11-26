@@ -87,11 +87,6 @@ vnoremap <C-f> <Nop>
 " Use C-l to switch to right pane in netrw
 nmap <leader><leader>l <Plug>NetrwRefresh
 
-sign define DiagnosticSignError text=⏺ texthl=DiagnosticSignError linehl= numhl=
-sign define DiagnosticSignWarn text=⏺ texthl=DiagnosticSignWarn linehl= numhl=
-sign define DiagnosticSignInfo text=⏺ texthl=DiagnosticSignInfo linehl= numhl=
-sign define DiagnosticSignHint text=⏺ texthl=DiagnosticSignHint linehl= numhl=
-
 lua <<EOF
 -- TODO: move these inside theme
 vim.cmd([[
@@ -113,6 +108,12 @@ vim.cmd([[
     hi ColorColumn guibg=#2b2b2b
     hi ExtraWhitespace ctermbg=131 guibg=#bc3f3c
 ]])
+
+-- Signs
+vim.fn.sign_define('DiagnosticSignError', {texthl = 'DiagnosticSignError', text = '⏺' })
+vim.fn.sign_define('DiagnosticSignWarn', {texthl = 'DiagnosticSignWarn', text = '⏺' })
+vim.fn.sign_define('DiagnosticSignWarn', {texthl = 'DiagnosticSignWarn', text = '⏺' })
+vim.fn.sign_define('DiagnosticSignWarn', {texthl = 'DiagnosticSignWarn', text = '⏺' })
 
 -- User commands
 vim.api.nvim_create_user_command('BufDeleteOthers', '%bd|e#', {})
