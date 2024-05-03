@@ -17,3 +17,7 @@ blinking = "Always"
 
 [cursor.vi_mode_style]
 blinking = "Always"
+
+[font]
+normal = { family = "JetBrains Mono", style = "Regular" }
+size = 12
