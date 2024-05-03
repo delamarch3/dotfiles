@@ -359,8 +359,8 @@ local cmp = require "cmp"
 cmp.setup {
   snippet = {
       expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
+          luasnip.lsp_expand(args.body)
+      end,
   },
   mapping = cmp.mapping.preset.insert({
     ["<C-u>"] = cmp.mapping.scroll_docs(-4), -- Up
