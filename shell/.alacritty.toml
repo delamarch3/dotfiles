@@ -21,3 +21,6 @@ blinking = "Always"
 [font]
 normal = { family = "JetBrains Mono", style = "Regular" }
 size = 12
+
+[mouse]
+hide_when_typing = true
