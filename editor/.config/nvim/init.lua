@@ -270,6 +270,7 @@ vim.api.nvim_set_hl(0, "@lsp.type.constParameter.rust", { link = "Constant" })
 vim.api.nvim_set_hl(0, "@constant.builtin.rust", { link = "Type" })
 vim.api.nvim_set_hl(0, "@lsp.type.type.terraform", { link = "Keyword" })
 vim.api.nvim_set_hl(0, "@lsp.type.enumMember.terraform", { link = "String" })
+vim.api.nvim_set_hl(0, "@lsp.typemod.variable.callable.rust", { link = "Function" })
 
 vim.api.nvim_set_hl(0, "@lsp.typemod.variable.readonly.cpp", { link = "Constant" })
 
