@@ -40,7 +40,6 @@ vim.opt.clipboard = "unnamed" -- Copy to clipboard
 vim.opt.showmode = false
 vim.opt.splitright = true -- Split onto new pane
 vim.opt.splitbelow = true
--- vim.opt.guicursor = "a:blinkon10,i-ci:ver25-iCursor-blinkwait200-blinkon200-blinkoff150,r-cr-o:hor20"
 vim.opt.guicursor = "a:blinkon10,i-ci:ver25,r-cr-o:hor20"
 vim.opt.cc = "100" -- Ruler
 vim.opt.tabstop = 4
@@ -50,6 +49,7 @@ vim.opt.shiftwidth = 4
 vim.opt.smarttab = true
 vim.opt.number = true
 vim.g.mapleader = " "
+vim.opt.updatetime = 500 -- CursorHoldI
 
 -- Close brackets automatically, with return:
 vim.keymap.set("i", "{<cr>", "{<cr>}<C-O><S-O>", { remap = false })
@@ -188,13 +188,6 @@ vim.diagnostic.config({
   severity_sort = true,
 })
 
--- Prioritise LSP hover over diagnostics:
-function hover_fixed()
-    vim.api.nvim_command("set eventignore=CursorHold")
-    vim.lsp.buf.hover()
-    vim.api.nvim_command('autocmd CursorMoved <buffer> ++once set eventignore=""')
-end
-
 local lualine_theme = require"themes.lualine"
 require("lualine").setup {
     options = {
@@ -211,7 +204,9 @@ require("lualine").setup {
         lualine_x = { "encoding", "filetype" },
     }
 }
+
 require"fidget".setup {}
+
 require("Comment").setup {
     padding = true,
     sticky = true,
@@ -314,21 +309,51 @@ require("gitsigns").setup({
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-  callback = function(ev)
-    local opts = { buffer = ev.buf }
+  callback = function(args)
+    local opts = { buffer = args.buf }
+    local bufnr = args.buf
+
+    -- Prioritise LSP hover over diagnostics:
+    local function hover_fixed()
+        vim.api.nvim_command("set eventignore=CursorHold")
+        vim.lsp.buf.hover()
+        vim.api.nvim_command('autocmd CursorMoved <buffer> ++once set eventignore=""')
+    end
+
+    vim.lsp.handlers['textDocument/signatureHelp'] = function(_, result, ctx, config)
+        if not result or not result.signatures then return end
+
+        -- Remove documentation to display the signature only
+        local filtered_result = vim.deepcopy(result)
+        for _, signature in ipairs(filtered_result.signatures) do
+            signature.documentation = nil
+        end
+
+        local opts = { focusable = false }
+        vim.lsp.handlers.signature_help(_, filtered_result, ctx, vim.tbl_extend('force', config or {}, opts))
+    end
+
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-    vim.keymap.set("n", "<space>k", hover_fixed, opts)
-    vim.keymap.set("n", "K", vim.lsp.buf.signature_help, opts)
-    vim.keymap.set("n", "<space>wl", function()
-      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts)
+    vim.keymap.set("n", "K", hover_fixed, opts)
+    vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
     vim.keymap.set("n", "<space>r", vim.lsp.buf.rename, opts)
     vim.keymap.set({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, opts)
     vim.keymap.set("n", "<space>mm", function()
       vim.lsp.buf.format { async = true }
     end, opts)
+
+    -- Show signature help in insert mode
+    -- vim.api.nvim_create_autocmd("CursorHoldI", {
+    --     buffer = bufnr,
+    --     callback = function()
+    --         local params = vim.lsp.util.make_position_params()
+    --         vim.lsp.buf_request(0, 'textDocument/signatureHelp', params, function(err, result, ctx, config)
+    --             if err or not result then return end
+    --             vim.lsp.handlers['textDocument/signatureHelp'](err, result, ctx, config)
+    --         end)
+    --     end,
+    -- })
   end,
 })
 
