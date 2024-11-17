@@ -17,6 +17,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
     "nvim-treesitter/nvim-treesitter",
     "nvim-treesitter/nvim-treesitter-textobjects",
+    "nvim-treesitter/nvim-treesitter-context",
     {
         "nvim-telescope/telescope.nvim", tag = "0.1.2",
         dependencies = { "nvim-lua/plenary.nvim" }
@@ -76,6 +77,7 @@ vim.keymap.set("n", "<leader>/", "<cmd>Telescope live_grep<cr>", { remap = false
 vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", { remap = false })
 vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<cr>", { remap = false })
 vim.keymap.set("n", "gtd", "<cmd>Telescope lsp_type_definitions<cr>", { remap = false })
+vim.keymap.set("n", "<space>c", "<cmd>TSContextToggle<cr>", { remap = false })
 
 -- Diagnostics
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
@@ -246,6 +248,17 @@ require"nvim-treesitter.configs".setup {
       },
     },
   },
+}
+
+require'treesitter-context'.setup{
+  enable = true,
+  multiwindow = true,
+  max_lines = 0,
+  min_window_height = 0,
+  line_numbers = true,
+  multiline_threshold = 1,
+  trim_scope = 'outer',
+  mode = 'cursor',
 }
 
 -- LSP
