@@ -335,12 +335,24 @@ vim.api.nvim_create_autocmd("LspAttach", {
 -- TODO: Disable specific lsp tokens eg @lsp.type.enumMember.rust
 local lspconfig = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
-local servers = { "rust_analyzer", "gopls", "clangd", "terraformls", "hls" }
+local servers = { "gopls", "clangd", "terraformls", "hls" }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     capabilities = capabilities,
   }
 end
+
+-- TODO: create a user command to add features per open project
+lspconfig["rust_analyzer"].setup {
+    capabilities = capabilities,
+    settings = {
+        ["rust-analyzer"] = {
+            cargo = {
+                features = "all"
+            }
+        }
+    }
+}
 
 lspconfig["tsserver"].setup {
     capabilities = capabilities,
