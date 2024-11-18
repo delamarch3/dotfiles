@@ -346,27 +346,34 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.lsp.handlers.signature_help(_, filtered_result, ctx, vim.tbl_extend('force', config or {}, opts))
     end
 
+    local signature_help_enabled = false
+    local function toggle_signature_help()
+        local group_name = "SignatureHelp"
+
+        if signature_help_enabled then
+            vim.api.nvim_del_augroup_by_name(group_name)
+            signature_help_enabled = false
+        else
+            vim.api.nvim_create_augroup(group_name, { clear = true })
+            vim.api.nvim_create_autocmd("CursorHoldI", {
+                group = group_name,
+                callback = function()
+                    vim.lsp.buf.signature_help()
+                end,
+            })
+            signature_help_enabled = true
+        end
+    end
+
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
     vim.keymap.set("n", "K", hover_fixed, opts)
-    vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
+    vim.keymap.set("i", "<C-k>", toggle_signature_help, opts)
     vim.keymap.set("n", "<space>r", vim.lsp.buf.rename, opts)
     vim.keymap.set({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, opts)
     vim.keymap.set("n", "<space>mm", function()
       vim.lsp.buf.format { async = true }
     end, opts)
-
-    -- Show signature help in insert mode
-    -- vim.api.nvim_create_autocmd("CursorHoldI", {
-    --     buffer = bufnr,
-    --     callback = function()
-    --         local params = vim.lsp.util.make_position_params()
-    --         vim.lsp.buf_request(0, 'textDocument/signatureHelp', params, function(err, result, ctx, config)
-    --             if err or not result then return end
-    --             vim.lsp.handlers['textDocument/signatureHelp'](err, result, ctx, config)
-    --         end)
-    --     end,
-    -- })
   end,
 })
 
@@ -380,6 +387,7 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+-- https://rust-analyzer.github.io/manual.html#configuration
 -- TODO: create a user command to add features per open project
 lspconfig["rust_analyzer"].setup {
     capabilities = capabilities,
