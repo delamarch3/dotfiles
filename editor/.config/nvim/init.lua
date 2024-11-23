@@ -174,16 +174,6 @@ vim.api.nvim_create_autocmd("ModeChanged", {
   end
 })
 
--- Format on save
-local format_sync_grp = vim.api.nvim_create_augroup("Format", {})
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*.rs,*.go,*.tf,*.c,*.h,*.cpp,*.hs",
-  callback = function()
-    vim.lsp.buf.format({ timeout_ms = 200 })
-  end,
-  group = format_sync_grp,
-})
-
 vim.diagnostic.config({
   virtual_text = false,
   underline = true,
@@ -273,9 +263,12 @@ vim.api.nvim_set_hl(0, "@type.qualifier", { link = "Keyword" })
 vim.api.nvim_set_hl(0, "@lsp.type.enumMember.rust", { link = "Type" })
 vim.api.nvim_set_hl(0, "@lsp.type.constParameter.rust", { link = "Constant" })
 vim.api.nvim_set_hl(0, "@constant.builtin.rust", { link = "Type" })
+vim.api.nvim_set_hl(0, "@lsp.typemod.variable.callable.rust", { link = "Function" })
+vim.api.nvim_set_hl(0, "@lsp.typemod.method", { link = "Function" })
+vim.api.nvim_set_hl(0, "@lsp.typemod.keyword", { link = "Keyword" })
+
 vim.api.nvim_set_hl(0, "@lsp.type.type.terraform", { link = "Keyword" })
 vim.api.nvim_set_hl(0, "@lsp.type.enumMember.terraform", { link = "String" })
-vim.api.nvim_set_hl(0, "@lsp.typemod.variable.callable.rust", { link = "Function" })
 
 vim.api.nvim_set_hl(0, "@lsp.typemod.variable.readonly.cpp", { link = "Constant" })
 
@@ -361,6 +354,28 @@ vim.api.nvim_create_autocmd("LspAttach", {
             signature_help_enabled = true
         end
     end
+
+    -- Format on save
+    local format_on_save_enabled = false
+    local function toggle_format_on_save()
+        local group_name = "FormatOnSave"
+
+        if format_on_save_enabled then
+            vim.api.nvim_del_augroup_by_name(group_name)
+            format_on_save_enabled = false
+        else
+            vim.api.nvim_create_augroup(group_name, { clear = true })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              group = group_name,
+              callback = function()
+                  vim.lsp.buf.format()
+              end,
+            })
+            format_on_save_enabled = true
+        end
+    end
+    toggle_format_on_save()
+    vim.api.nvim_create_user_command("FormatOnSaveToggle", toggle_format_on_save, {})
 
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
