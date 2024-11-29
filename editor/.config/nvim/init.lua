@@ -161,19 +161,6 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     command = "set formatoptions-=ro"
 })
 
--- Weird cursor jumping with luasnip
-vim.api.nvim_create_autocmd("ModeChanged", {
-  pattern = "*",
-  callback = function()
-    if ((vim.v.event.old_mode == "s" and vim.v.event.new_mode == "n") or vim.v.event.old_mode == "i")
-        and require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
-        and not require("luasnip").session.jump_active
-    then
-      require("luasnip").unlink_current()
-    end
-  end
-})
-
 vim.diagnostic.config({
   virtual_text = false,
   underline = true,
@@ -425,6 +412,20 @@ lspconfig["volar"].setup {
     capabilities = capabilities,
     filetypes = is_npm_package_installed "vue" and { "vue", "typescript", "javascript" } or { "vue" },
 }
+
+-- TODO: move to builtin completion (vim.lsp.completion.enable), remove cmp and luasnip
+-- Weird cursor jumping with luasnip
+vim.api.nvim_create_autocmd("ModeChanged", {
+  pattern = "*",
+  callback = function()
+    if ((vim.v.event.old_mode == "s" and vim.v.event.new_mode == "n") or vim.v.event.old_mode == "i")
+        and require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
+        and not require("luasnip").session.jump_active
+    then
+      require("luasnip").unlink_current()
+    end
+  end
+})
 
 local luasnip = require "luasnip"
 local cmp = require "cmp"
