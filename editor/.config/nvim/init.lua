@@ -198,8 +198,7 @@ require("Comment").setup {
 }
 
 require"nvim-treesitter.configs".setup {
-  ensure_installed = { "c", "cpp", "lua", "vim", "rust", "go", "terraform", "hcl", "typescript",
-      "javascript", "json", "yaml", "python", "vue", "tlaplus", "haskell", "ocaml" },
+  ensure_installed = {},
   sync_install = false,
   auto_install = false,
   ignore_install = {},
@@ -245,6 +244,11 @@ vim.api.nvim_set_hl(0, "@lsp.typemod.variable.static", { link = "Constant" })
 vim.api.nvim_set_hl(0, "@namespace", { link = "Namespace" })
 vim.api.nvim_set_hl(0, "@constructor", { link = "Function" })
 vim.api.nvim_set_hl(0, "@type.qualifier", { link = "Keyword" })
+vim.api.nvim_set_hl(0, "@variable", { link = "NormalFg" })
+vim.api.nvim_set_hl(0, "@function.macro", { link = "PreProc" })
+vim.api.nvim_set_hl(0, "@type", { link = "Type" })
+vim.api.nvim_set_hl(0, "@type.builtin", { link = "Type" })
+vim.api.nvim_set_hl(0, "@variable.builtin", { link = "NormalFg" })
 
 -- Language specific:
 vim.api.nvim_set_hl(0, "@lsp.type.enumMember.rust", { link = "Type" })
