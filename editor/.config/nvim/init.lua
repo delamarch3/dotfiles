@@ -103,6 +103,10 @@ vim.cmd([[
     hi SignColumn guibg=#2b2b2b
     hi ColorColumn guibg=#2b2b2b
     hi ExtraWhitespace ctermbg=131 guibg=#bc3f3c
+
+    hi GitSignsAdd guibg=#2b2b2b guifg=#32cd32
+    hi GitSignsChange guibg=#2b2b2b guifg=#808080
+    hi GitSignsDelete guibg=#2b2b2b guifg=#ff0000
 ]])
 
 -- User commands
