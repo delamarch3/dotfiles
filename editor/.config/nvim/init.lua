@@ -105,12 +105,6 @@ vim.cmd([[
     hi ExtraWhitespace ctermbg=131 guibg=#bc3f3c
 ]])
 
--- Signs
-vim.fn.sign_define("DiagnosticSignError", {texthl = "DiagnosticSignError", text = "⏺" })
-vim.fn.sign_define("DiagnosticSignWarn", {texthl = "DiagnosticSignWarn", text = "⏺" })
-vim.fn.sign_define("DiagnosticSignInfo", {texthl = "DiagnosticSignInfo", text = "⏺" })
-vim.fn.sign_define("DiagnosticSignHint", {texthl = "DiagnosticSignHint", text = "⏺" })
-
 -- User commands
 vim.api.nvim_create_user_command("BufDeleteOthers", "%bd|e#", {})
 vim.api.nvim_create_user_command("BufDeleteAll", "%bd", {})
@@ -162,9 +156,17 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 })
 
 vim.diagnostic.config({
-  virtual_text = false,
-  underline = true,
-  severity_sort = true,
+    virtual_text = false,
+    underline = true,
+    severity_sort = true,
+    signs = {
+        text = {
+            [vim.diagnostic.severity.HINT]  = "⏺",
+            [vim.diagnostic.severity.ERROR] = "⏺",
+            [vim.diagnostic.severity.INFO]  = "⏺",
+            [vim.diagnostic.severity.WARN]  = "⏺"
+        }
+    }
 })
 
 local lualine_theme = require"themes.lualine"
@@ -239,6 +241,7 @@ vim.api.nvim_set_hl(0, "@lsp.type.namespace", { link = "Namespace" })
 vim.api.nvim_set_hl(0, "@lsp.type.decorator", { link = "PreProc" })
 vim.api.nvim_set_hl(0, "@lsp.mod.constant", { link = "Constant" })
 vim.api.nvim_set_hl(0, "@lsp.typemod.variable.static", { link = "Constant" })
+vim.api.nvim_set_hl(0, "@lsp.type.macro", { link = "PreProc" })
 
 -- Treesitter
 vim.api.nvim_set_hl(0, "@namespace", { link = "Namespace" })
