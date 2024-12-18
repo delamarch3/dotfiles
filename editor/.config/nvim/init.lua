@@ -1,6 +1,10 @@
 local home_dir = os.getenv("HOME")
 package.path = home_dir .. "/.config/nvim/" .. package.path
 
+-- colourscheme
+local darcula = require('darcula')
+darcula.load()
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -84,30 +88,9 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
 
--- TODO: move these inside theme
-vim.cmd([[
-    colorscheme darcula
-    hi Normal guibg=#232525
-    hi Delimiter guifg=#a9b7c6
-    hi Type guifg=#a9b7c6 gui=NONE
-    hi Boolean guifg=#6897bb
-    hi PreProc guifg=#cc7832
-    hi LineNr guibg=#2b2b2b guifg=#808080
-    hi Search guibg=#214283
-    hi TelescopeMatching guifg=#d8d8d8
-    hi StorageClass guifg=#cc7832
-    hi Operator guifg=#a9b7c6
-    hi DiffAdd guibg=#2b2b2b guifg=#32cd32
-    hi DiffChange guibg=#2b2b2b guifg=#808080
-    hi DiffDelete guibg=#2b2b2b guifg=#ff0000
-    hi SignColumn guibg=#2b2b2b
-    hi ColorColumn guibg=#2b2b2b
-    hi ExtraWhitespace ctermbg=131 guibg=#bc3f3c
-
-    hi GitSignsAdd guibg=#2b2b2b guifg=#32cd32
-    hi GitSignsChange guibg=#2b2b2b guifg=#808080
-    hi GitSignsDelete guibg=#2b2b2b guifg=#ff0000
-]])
+-- vim.cmd([[
+--     colorscheme darcula
+-- ]])
 
 -- User commands
 vim.api.nvim_create_user_command("BufDeleteOthers", "%bd|e#", {})
@@ -240,47 +223,11 @@ require'treesitter-context'.setup{
   mode = 'cursor',
 }
 
--- LSP
-vim.api.nvim_set_hl(0, "@lsp.type.namespace", { link = "Namespace" })
-vim.api.nvim_set_hl(0, "@lsp.type.decorator", { link = "PreProc" })
-vim.api.nvim_set_hl(0, "@lsp.mod.constant", { link = "Constant" })
-vim.api.nvim_set_hl(0, "@lsp.typemod.variable.static", { link = "Constant" })
-vim.api.nvim_set_hl(0, "@lsp.type.macro", { link = "PreProc" })
-
--- Treesitter
-vim.api.nvim_set_hl(0, "@namespace", { link = "Namespace" })
-vim.api.nvim_set_hl(0, "@constructor", { link = "Function" })
-vim.api.nvim_set_hl(0, "@type.qualifier", { link = "Keyword" })
-vim.api.nvim_set_hl(0, "@variable", { link = "NormalFg" })
-vim.api.nvim_set_hl(0, "@function.macro", { link = "PreProc" })
-vim.api.nvim_set_hl(0, "@type", { link = "Type" })
-vim.api.nvim_set_hl(0, "@type.builtin", { link = "Type" })
-vim.api.nvim_set_hl(0, "@variable.builtin", { link = "NormalFg" })
-
--- Language specific:
-vim.api.nvim_set_hl(0, "@lsp.type.enumMember.rust", { link = "Type" })
-vim.api.nvim_set_hl(0, "@lsp.type.constParameter.rust", { link = "Constant" })
-vim.api.nvim_set_hl(0, "@constant.builtin.rust", { link = "Type" })
-vim.api.nvim_set_hl(0, "@lsp.typemod.variable.callable", { link = "Function" })
-vim.api.nvim_set_hl(0, "@lsp.typemod.method", { link = "Function" })
-vim.api.nvim_set_hl(0, "@lsp.typemod.function", { link = "Function" })
-vim.api.nvim_set_hl(0, "@lsp.typemod.keyword", { link = "Keyword" })
-
-vim.api.nvim_set_hl(0, "@lsp.type.type.terraform", { link = "Keyword" })
-vim.api.nvim_set_hl(0, "@lsp.type.enumMember.terraform", { link = "String" })
-
-vim.api.nvim_set_hl(0, "@lsp.typemod.variable.readonly.cpp", { link = "Constant" })
-
-vim.api.nvim_set_hl(0, "@tag.vue", { link = "htmlTag" })
-vim.api.nvim_set_hl(0, "@tag.delimiter.vue", { link = "htmlTag" })
-vim.api.nvim_set_hl(0, "@tag.attribute.vue", { link = "NormalFg" })
-vim.api.nvim_set_hl(0, "@method.vue", { link = "NormalFg" })
-vim.api.nvim_set_hl(0, "@string.vue", { link = "htmlString" })
-
-vim.api.nvim_set_hl(0, "@function.call.haskell", { link = "NormalFg" })
-vim.api.nvim_set_hl(0, "@function.haskell", { link = "NormalFg" })
-
-vim.api.nvim_set_hl(0, "@constructor.ocaml", { link = "Type" })
+-- vim.api.nvim_set_hl(0, "@tag.vue", { link = "htmlTag" })
+-- vim.api.nvim_set_hl(0, "@tag.delimiter.vue", { link = "htmlTag" })
+-- vim.api.nvim_set_hl(0, "@tag.attribute.vue", { link = "NormalFg" })
+-- vim.api.nvim_set_hl(0, "@method.vue", { link = "NormalFg" })
+-- vim.api.nvim_set_hl(0, "@string.vue", { link = "htmlString" })
 
 local actions = require("telescope.actions")
 require("telescope").setup({
