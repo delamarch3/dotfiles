@@ -71,6 +71,8 @@ local highlights = {
 
     ExtraWhitespace = { bg = "#BC3F3C" }, -- new red
 
+    MatchParen = { fg = "#FFEF28", bg = "#3B514D" },
+
     TelescopeMatching = { fg = "#D8D8D8" }, -- new light grey
 }
 
