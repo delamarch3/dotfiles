@@ -109,6 +109,7 @@ local links = {
         "@lsp.type.type.terraform"
     },
     String = {
+        "Character",
         "@lsp.type.enumMember.terraform"
     },
     Constant = {
