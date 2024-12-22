@@ -57,3 +57,10 @@ fd() {
 fh() {
   eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
 }
+
+strdiff() {
+    echo $1 > f1
+    echo $2 > f2
+    git diff --word-diff --word-diff-regex=. --no-index f1 f2
+    rm f1 f2
+}
