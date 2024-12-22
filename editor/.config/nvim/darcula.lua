@@ -87,7 +87,8 @@ local links = {
         "@type",
         "@type.builtin",
 
-        "@lsp.type.enumMember.rust"
+        "@lsp.type.enumMember.rust",
+        "@lsp.typemod.typeAlias"
     },
     PreProc = {
         "@function.macro",
