@@ -81,6 +81,8 @@ vim.keymap.set("n", "<leader>/", "<cmd>Telescope live_grep<cr>", { remap = false
 vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", { remap = false })
 vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<cr>", { remap = false })
 vim.keymap.set("n", "gtd", "<cmd>Telescope lsp_type_definitions<cr>", { remap = false })
+
+-- Treesitter
 vim.keymap.set("n", "<space>c", "<cmd>TSContextToggle<cr>", { remap = false })
 
 -- Diagnostics
@@ -100,27 +102,49 @@ vim.cmd([[
     cnoreabbrev bda BufDeleteAll
 ]])
 
+local function is_floating_window()
+    local window_config = vim.api.nvim_win_get_config(0)
+    return window_config.relative ~= ""
+end
+
 -- Highlight trailing whitespace
 local hlwhitespace = vim.api.nvim_create_augroup("hlwhitespace", { clear = true })
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
     pattern = "*",
     group = hlwhitespace,
-    command = [[match ExtraWhitespace /\s\+$/]]
+    callback = function()
+        if not is_floating_window() then
+            vim.cmd([[match ExtraWhitespace /\s\+$/]])
+        end
+    end
 })
 vim.api.nvim_create_autocmd({ "InsertEnter" }, {
     pattern = "*",
     group = hlwhitespace,
-    command = [[match ExtraWhitespace /\s\+\%#\@<!$/]]
+    callback = function()
+        if not is_floating_window() then
+            vim.cmd([[match ExtraWhitespace /\s\+\%#\@<!$/]])
+        end
+    end
 })
 vim.api.nvim_create_autocmd({ "InsertLeave" }, {
     pattern = "*",
     group = hlwhitespace,
-    command = [[match ExtraWhitespace /\s\+$/]]
+    callback = function()
+        if not is_floating_window() then
+            vim.cmd([[match ExtraWhitespace /\s\+$/]])
+        end
+    end
 })
 vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
     pattern = "*",
     group = hlwhitespace,
-    command = "call clearmatches()"
+    -- command = "call clearmatches()"
+    callback = function()
+        if not is_floating_window() then
+            vim.cmd([[call clearmatches()]])
+        end
+    end
 })
 
 -- Number toggle
