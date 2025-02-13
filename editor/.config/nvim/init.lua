@@ -2,8 +2,7 @@ local home_dir = os.getenv("HOME")
 package.path = home_dir .. "/.config/nvim/" .. package.path
 
 -- colourscheme
-local darcula = require('darcula')
-darcula.load()
+require('darcula').load()
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -33,7 +32,6 @@ require("lazy").setup({
     "lewis6991/gitsigns.nvim",
     "nvim-lualine/lualine.nvim",
     { "j-hui/fidget.nvim", tag = "legacy" },
-    "kl4mm/darcula",
     "numToStr/Comment.nvim",
     "christoomey/vim-tmux-navigator", -- Maps <C-w>l to <C-l> etc
 })
@@ -89,10 +87,6 @@ vim.keymap.set("n", "<space>c", "<cmd>TSContextToggle<cr>", { remap = false })
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
-
--- vim.cmd([[
---     colorscheme darcula
--- ]])
 
 -- User commands
 vim.api.nvim_create_user_command("BufDeleteOthers", "%bd|e#", {})
@@ -345,7 +339,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end
     end
     toggle_format_on_save()
-    vim.api.nvim_create_user_command("FormatOnSaveToggle", toggle_format_on_save, {})
+    vim.api.nvim_create_user_command("ToggleFormatOnSave", toggle_format_on_save, {})
 
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
@@ -382,7 +376,7 @@ lspconfig["rust_analyzer"].setup {
     }
 }
 
-lspconfig["tsserver"].setup {
+lspconfig["ts_ls"].setup {
     capabilities = capabilities,
     on_attach = function(client, bufnr)
         client.server_capabilities.semanticTokensProvider = nil

@@ -1,21 +1,26 @@
 PROMPT='%B%1~%b %# '
-export PATH="$HOME/Library/Python/3.8/bin:$PATH"
-export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+# export PATH="$HOME/Library/Python/3.8/bin:$PATH"
+# export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 export PATH="$PATH:/usr/local/go/bin"
+export PATH="$PATH:$HOME/go/bin"
 export PATH="$PATH:/opt/homebrew/bin"
 export PATH="$PATH:$HOME/.cargo/bin"
+export PATH="$PATH:/opt/homebrew/opt/openjdk@17/bin"
+export PATH="$PATH:$HOME/jdtls/bin"
 alias ll="ls -l"
 
 export HOMEBREW_NO_ANALYTICS=1
 
-export JAVA_HOME="/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-17.jdk/Contents/Home"
 
 alias tf="terraform"
-alias py="python3"
+alias python="python3"
+alias pip="pip3"
 alias vim="nvim"
 alias t="tmux"
 alias tls="tmux ls"
 alias ta="tmux attach -t"
+alias got="go test ./... -race -cover"
 
 # use vi key bindings
 bindkey -v
@@ -64,3 +69,6 @@ strdiff() {
     git diff --word-diff --word-diff-regex=. --no-index f1 f2
     rm f1 f2
 }
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
