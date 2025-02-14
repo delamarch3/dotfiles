@@ -61,21 +61,27 @@ vim.keymap.set("i", "[<cr>", "[<cr>]<c-o><s-o>", { remap = false })
 
 -- Nops
 vim.keymap.set("n", "<SPACE>", "<Nop>", { remap = false })
-vim.keymap.set("n", "<C-f>", "<Nop>", { remap = false })
 vim.keymap.set("n", "<C-c>", "<Nop>", { remap = false })
-vim.keymap.set("", "Q", "<Nop>", { remap = false })
-vim.keymap.set("", "q", "<Nop>", { remap = false })
 vim.keymap.set("v", "<C-f>", "<Nop>", { remap = false })
-vim.keymap.set("n", "<leader><leader>l", "<Plug>NetrwRefresh", { remap = true })
+vim.keymap.set("v", "<C-b>", "<Nop>", { remap = false })
+-- vim.keymap.set("n", "<C-f>", "<Nop>", { remap = false })
+-- vim.keymap.set("n", "<C-b>", "<Nop>", { remap = false })
+-- vim.keymap.set("", "Q", "<Nop>", { remap = false })
+-- vim.keymap.set("", "q", "<Nop>", { remap = false })
+-- vim.keymap.set("n", "<leader><leader>l", "<Plug>NetrwRefresh", { remap = true }) -- vim-tmux-navigator/pull/393
 
 -- Telescope
 vim.keymap.set("n", "<leader>f", "<cmd>Telescope find_files<cr>", { remap = false })
 vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers <cr>", { remap = false })
 vim.keymap.set("n", "<leader>s", "<cmd>Telescope lsp_document_symbols<cr>", { remap = false })
 vim.keymap.set("n", "<leader>S", "<cmd>Telescope lsp_workspace_symbols<cr>", { remap = false })
-vim.keymap.set("n", "<leader>d", "<cmd>Telescope diagnostics bufnr=0 severity_bound=0<cr>", { remap = false })
-vim.keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics severity_bound=0<cr>", { remap = false })
+vim.keymap.set("n", "<leader>da", "<cmd>Telescope diagnostics bufnr=0 severity_bound=0<cr>", { remap = false })
+vim.keymap.set("n", "<leader>de", "<cmd>Telescope diagnostics bufnr=0 severity=1<cr>", { remap = false })
+vim.keymap.set("n", "<leader>DA", "<cmd>Telescope diagnostics severity_bound=0<cr>", { remap = false })
+vim.keymap.set("n", "<leader>DE", "<cmd>Telescope diagnostics severity=1<cr>", { remap = false })
 vim.keymap.set("n", "<leader>/", "<cmd>Telescope live_grep<cr>", { remap = false })
+vim.keymap.set("n", "<leader>tr", "<cmd>Telescope resume<cr>", { remap = false })
+-- vim.keymap.set("n", "<leader>j", "<cmd>Telescope jumplist<cr>", { remap = false })
 vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", { remap = false })
 vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<cr>", { remap = false })
 vim.keymap.set("n", "gtd", "<cmd>Telescope lsp_type_definitions<cr>", { remap = false })
@@ -87,6 +93,10 @@ vim.keymap.set("n", "<space>c", "<cmd>TSContextToggle<cr>", { remap = false })
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
+
+-- Quickfix
+vim.keymap.set("n", "]q", "<cmd>cne<CR>")
+vim.keymap.set("n", "[q", "<cmd>cpr<CR>")
 
 -- User commands
 vim.api.nvim_create_user_command("BufDeleteOthers", "%bd|e#", {})

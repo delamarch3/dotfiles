@@ -45,6 +45,7 @@ local highlights = {
     SignColumn = { bg = c.bg2, fg = c.grey },
     LineNr = { bg = c.bg2, fg = c.grey },
     ColorColumn = { bg = c.bg2 },
+    StatusLine = { bg = c.bg2, fg = c.fg },
 
     DiagnosticError = { fg = c.red, bg = c.bg2 },
     DiagnosticWarn = { fg = c.orange, bg = c.bg2 },
@@ -74,6 +75,7 @@ local highlights = {
     MatchParen = { fg = "#FFEF28", bg = "#3B514D" },
 
     TelescopeMatching = { fg = "#D8D8D8" }, -- new light grey
+    QuickFixLine = { fg = "#D8D8D8" }, -- new light grey
 }
 
 local links = {
