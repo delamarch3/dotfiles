@@ -64,10 +64,9 @@ vim.keymap.set("n", "<SPACE>", "<Nop>", { remap = false })
 vim.keymap.set("n", "<C-c>", "<Nop>", { remap = false })
 vim.keymap.set("v", "<C-f>", "<Nop>", { remap = false })
 vim.keymap.set("v", "<C-b>", "<Nop>", { remap = false })
--- vim.keymap.set("n", "<C-f>", "<Nop>", { remap = false })
--- vim.keymap.set("n", "<C-b>", "<Nop>", { remap = false })
--- vim.keymap.set("", "Q", "<Nop>", { remap = false })
--- vim.keymap.set("", "q", "<Nop>", { remap = false })
+ -- TODO: remove later:
+vim.keymap.set("n", "<C-f>", "<Nop>", { remap = false })
+vim.keymap.set("n", "<C-b>", "<Nop>", { remap = false })
 -- vim.keymap.set("n", "<leader><leader>l", "<Plug>NetrwRefresh", { remap = true }) -- vim-tmux-navigator/pull/393
 
 -- Telescope
@@ -366,7 +365,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 -- TODO: Disable specific lsp tokens eg @lsp.type.enumMember.rust
 local lspconfig = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
-local servers = { "gopls", "clangd", "terraformls", "hls" }
+local servers = { "gopls", "clangd", "terraformls", "hls", "jdtls" }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     capabilities = capabilities,
