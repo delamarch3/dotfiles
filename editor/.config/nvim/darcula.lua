@@ -76,6 +76,9 @@ local highlights = {
 
     TelescopeMatching = { fg = "#D8D8D8" }, -- new light grey
     QuickFixLine = { fg = "#D8D8D8" }, -- new light grey
+
+    HTMLTag = { fg = "#E8BF6A" }, -- new orange/yellow
+    HTMLString = { fg = "#A5C261" } -- new lightgreen
 }
 
 local links = {
@@ -98,8 +101,10 @@ local links = {
         "@lsp.type.decorator"
     },
     Variable = {
+        "htmlArg",
+
         "@variable",
-        "@variable.builtin"
+        "@variable.builtin",
     },
     Namespace = {
         "@namespace",
@@ -120,6 +125,10 @@ local links = {
         "@lsp.typemod.variable.static",
         "@lsp.type.constParameter.rust",
         "@lsp.typemod.variable.readonly.cpp"
+    },
+    HTMLTag = {
+        "htmlTagName",
+        "htmlEndTag"
     }
 }
 

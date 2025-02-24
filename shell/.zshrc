@@ -6,7 +6,7 @@ export PATH="$PATH:$HOME/go/bin"
 export PATH="$PATH:/opt/homebrew/bin"
 export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$PATH:/opt/homebrew/opt/openjdk@17/bin"
-export PATH="$PATH:$HOME/jdtls/bin"
+export PATH="$PATH:$HOME/bin"
 alias ll="ls -l"
 
 export HOMEBREW_NO_ANALYTICS=1
