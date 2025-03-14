@@ -107,8 +107,12 @@ local links = {
         "@variable.builtin",
     },
     Namespace = {
+        -- "@module",
         "@namespace",
         "@lsp.type.namespace"
+    },
+    Normal = {
+        "@tag.attribute.vue"
     },
     Keyword = {
         "@type.qualifier",
@@ -128,7 +132,13 @@ local links = {
     },
     HTMLTag = {
         "htmlTagName",
-        "htmlEndTag"
+        "htmlEndTag",
+
+        "@tag.vue",
+        "@tag.delimiter.vue"
+    },
+    HTMLString = {
+        "@string.vue"
     }
 }
 

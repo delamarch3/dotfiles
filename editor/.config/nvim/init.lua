@@ -6,14 +6,14 @@ require('darcula').load()
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -21,10 +21,11 @@ require("lazy").setup({
     "nvim-treesitter/nvim-treesitter",
     "nvim-treesitter/nvim-treesitter-textobjects",
     "nvim-treesitter/nvim-treesitter-context",
-    {
-        "nvim-telescope/telescope.nvim", tag = "0.1.2",
-        dependencies = { "nvim-lua/plenary.nvim" }
-    },
+    "nvim-lua/plenary.nvim",
+    -- {
+    --     "nvim-telescope/telescope.nvim", tag = "0.1.2",
+    --     dependencies = { "nvim-lua/plenary.nvim" }
+    -- },
     "neovim/nvim-lspconfig",
     "hrsh7th/nvim-cmp",
     "hrsh7th/cmp-nvim-lsp",
@@ -34,6 +35,7 @@ require("lazy").setup({
     { "j-hui/fidget.nvim", tag = "legacy" },
     "numToStr/Comment.nvim",
     "christoomey/vim-tmux-navigator", -- Maps <C-w>l to <C-l> etc
+    "ibhagwan/fzf-lua",
 })
 
 -- Options
@@ -62,28 +64,42 @@ vim.keymap.set("i", "[<cr>", "[<cr>]<c-o><s-o>", { remap = false })
 -- Nops
 vim.keymap.set("n", "<SPACE>", "<Nop>", { remap = false })
 vim.keymap.set("n", "<C-c>", "<Nop>", { remap = false })
+ -- TODO: remove later:
 vim.keymap.set("v", "<C-f>", "<Nop>", { remap = false })
 vim.keymap.set("v", "<C-b>", "<Nop>", { remap = false })
- -- TODO: remove later:
 vim.keymap.set("n", "<C-f>", "<Nop>", { remap = false })
 vim.keymap.set("n", "<C-b>", "<Nop>", { remap = false })
 -- vim.keymap.set("n", "<leader><leader>l", "<Plug>NetrwRefresh", { remap = true }) -- vim-tmux-navigator/pull/393
 
--- Telescope
-vim.keymap.set("n", "<leader>f", "<cmd>Telescope find_files<cr>", { remap = false })
-vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers <cr>", { remap = false })
-vim.keymap.set("n", "<leader>s", "<cmd>Telescope lsp_document_symbols<cr>", { remap = false })
-vim.keymap.set("n", "<leader>S", "<cmd>Telescope lsp_workspace_symbols<cr>", { remap = false })
-vim.keymap.set("n", "<leader>da", "<cmd>Telescope diagnostics bufnr=0 severity_bound=0<cr>", { remap = false })
-vim.keymap.set("n", "<leader>de", "<cmd>Telescope diagnostics bufnr=0 severity=1<cr>", { remap = false })
-vim.keymap.set("n", "<leader>DA", "<cmd>Telescope diagnostics severity_bound=0<cr>", { remap = false })
-vim.keymap.set("n", "<leader>DE", "<cmd>Telescope diagnostics severity=1<cr>", { remap = false })
-vim.keymap.set("n", "<leader>/", "<cmd>Telescope live_grep<cr>", { remap = false })
-vim.keymap.set("n", "<leader>tr", "<cmd>Telescope resume<cr>", { remap = false })
--- vim.keymap.set("n", "<leader>j", "<cmd>Telescope jumplist<cr>", { remap = false })
-vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", { remap = false })
-vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<cr>", { remap = false })
-vim.keymap.set("n", "gtd", "<cmd>Telescope lsp_type_definitions<cr>", { remap = false })
+-- -- Telescope
+-- vim.keymap.set("n", "<leader>f", "<cmd>Telescope find_files<cr>", { remap = false })
+-- vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers <cr>", { remap = false })
+-- vim.keymap.set("n", "<leader>s", "<cmd>Telescope lsp_document_symbols<cr>", { remap = false })
+-- vim.keymap.set("n", "<leader>S", "<cmd>Telescope lsp_workspace_symbols<cr>", { remap = false })
+-- vim.keymap.set("n", "<leader>da", "<cmd>Telescope diagnostics bufnr=0 severity_bound=0<cr>", { remap = false })
+-- vim.keymap.set("n", "<leader>de", "<cmd>Telescope diagnostics bufnr=0 severity=1<cr>", { remap = false })
+-- vim.keymap.set("n", "<leader>DA", "<cmd>Telescope diagnostics severity_bound=0<cr>", { remap = false })
+-- vim.keymap.set("n", "<leader>DE", "<cmd>Telescope diagnostics severity=1<cr>", { remap = false })
+-- vim.keymap.set("n", "<leader>/", "<cmd>Telescope live_grep<cr>", { remap = false })
+-- vim.keymap.set("n", "<leader>tr", "<cmd>Telescope resume<cr>", { remap = false })
+-- vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", { remap = false })
+-- vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<cr>", { remap = false })
+-- vim.keymap.set("n", "gtd", "<cmd>Telescope lsp_type_definitions<cr>", { remap = false })
+
+-- FZF
+vim.keymap.set("n", "<leader>f", "<cmd>FzfLua files<cr>", { remap = false })
+vim.keymap.set("n", "<leader>b", "<cmd>FzfLua buffers <cr>", { remap = false })
+vim.keymap.set("n", "<leader>s", "<cmd>FzfLua lsp_document_symbols<cr>", { remap = false })
+vim.keymap.set("n", "<leader>S", "<cmd>FzfLua lsp_workspace_symbols<cr>", { remap = false })
+vim.keymap.set("n", "<leader>da", "<cmd>FzfLua diagnostics_document<cr>", { remap = false })
+vim.keymap.set("n", "<leader>de", "<cmd>FzfLua diagnostics_document severity_only=1<cr>", { remap = false })
+vim.keymap.set("n", "<leader>DA", "<cmd>FzfLua diagnostics_workspace<cr>", { remap = false })
+vim.keymap.set("n", "<leader>DE", "<cmd>FzfLua diagnostics_workspace severity_only=1<cr>", { remap = false })
+vim.keymap.set("n", "<leader>/", "<cmd>FzfLua live_grep<cr>", { remap = false })
+vim.keymap.set("n", "<leader>tr", "<cmd>FzfLua resume<cr>", { remap = false })
+vim.keymap.set("n", "gr", "<cmd>FzfLua lsp_references<cr>", { remap = false })
+vim.keymap.set("n", "gi", "<cmd>FzfLua lsp_implementations<cr>", { remap = false })
+vim.keymap.set("n", "gtd", "<cmd>FzfLua lsp_typedefs<cr>", { remap = false })
 
 -- Treesitter
 vim.keymap.set("n", "<space>c", "<cmd>TSContextToggle<cr>", { remap = false })
@@ -214,7 +230,7 @@ require("Comment").setup {
 }
 
 require"nvim-treesitter.configs".setup {
-  ensure_installed = {},
+  ensure_installed = {'c', 'lua', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc'},
   sync_install = false,
   auto_install = false,
   ignore_install = {},
@@ -250,28 +266,123 @@ require'treesitter-context'.setup{
   mode = 'cursor',
 }
 
--- vim.api.nvim_set_hl(0, "@tag.vue", { link = "htmlTag" })
--- vim.api.nvim_set_hl(0, "@tag.delimiter.vue", { link = "htmlTag" })
--- vim.api.nvim_set_hl(0, "@tag.attribute.vue", { link = "NormalFg" })
--- vim.api.nvim_set_hl(0, "@method.vue", { link = "NormalFg" })
--- vim.api.nvim_set_hl(0, "@string.vue", { link = "htmlString" })
+-- local actions = require("telescope.actions")
+-- require("telescope").setup({
+--     defaults = {
+--         mappings = {
+--             n = {
+--                 ["<Esc>"] = function() end,
+--                 ["<C-c>"] = actions.close,
+--             },
+--         },
+--         layout_strategy = "horizontal",
+--         layout_config = {
+--             prompt_position = "top",
+--         },
+--         sorting_strategy = "ascending",
+--     },
+-- })
 
-local actions = require("telescope.actions")
-require("telescope").setup({
-    defaults = {
-        mappings = {
-            n = {
-                ["<Esc>"] = function() end,
-                ["<C-c>"] = actions.close,
-            },
-        },
-        layout_strategy = "horizontal",
-        layout_config = {
-            prompt_position = "top",
-        },
-        sorting_strategy = "ascending",
-    },
-})
+local actions = require("fzf-lua").actions
+require("fzf-lua").setup{
+  winopts = {
+      preview = {
+          winopts = { number = false }
+      }
+  },
+
+  keymap = {
+      builtin = {
+          ["<C-d>"] = "preview-page-down",
+          ["<C-u>"] = "preview-page-up",
+          ["<C-e>"] = "preview-down",
+          ["<C-y>"] = "preview-up",
+      },
+      fzf = {
+          ["ctrl-d"] = "preview-page-down",
+          ["ctrl-u"] = "preview-page-up",
+          ["ctrl-q"] = "select-all+accept",
+      },
+  },
+
+  actions = {
+      files = {
+          ["default"] = actions.file_edit_or_qf,
+          ["ctrl-s"] = actions.file_split,
+          ["ctrl-v"] = actions.file_vsplit,
+          ["ctrl-h"] = actions.toggle_hidden,
+      },
+  },
+
+  fzf_opts = {
+      ['--cycle'] = true,
+  },
+
+  hls = {
+      normal = "Normal",
+      border = "Normal",
+      title  = "Normal",
+      help_normal = "Normal",
+      help_border = "Normal",
+      preview_normal = "Normal",
+      preview_border = "Normal",
+      preview_title  = "Normal",
+      -- builtin preview only:
+      cursor = "Cursor",
+      cursorline = "Visual",
+      cursorlinenr = "Visual",
+      search = "CurSearch",
+  },
+
+  fzf_colors = {
+      ["fg"] = { "fg", "Normal" },
+      ["bg"] = { "bg", "Normal" },
+      ["hl"] = { "fg", "TelescopeMatching" },
+      ["fg+"] = { "fg", "Visual" },
+      ["bg+"] = { "bg", "Visual" },
+      ["hl+"] = { "fg", "TelescopeMatching" },
+      ["info"] = { "fg", "Type" },
+      ["border"] = { "fg", "Normal" },
+      ["gutter"] = { "bg", "Normal" },
+      ["query"] = { "fg", "Normal" },
+      ["prompt"] = { "fg", "Identifier" },
+      ["pointer"] = { "fg", "Visual" },
+      ["marker"] = { "fg", "Visual" },
+      ["header"] = { "fg", "Normal" },
+  },
+
+  previewers = {
+      builtin = {
+          syntax = true,
+          treesitter = { enabled = true }
+      }
+  },
+
+  -- Specific command/picker options:
+  defaults = {
+      git_icons = false,
+      file_icons = false,
+      no_header = true,
+  },
+  files = {
+      cwd_prompt = true,
+      cwd_prompt_shorten_len = 1,
+      hidden = false,
+      no_ignore = false,
+  },
+  lsp = {
+      symbols = {
+          symbol_style = false,
+      }
+  },
+  buffers = {
+      keymap = { builtin = { ["<C-d>"] = false } },
+      actions = { ["ctrl-x"] = false, ["x"] = { actions.buf_del, actions.resume } },
+  },
+  grep = {
+      no_header = false
+  }
+}
 
 require("gitsigns").setup({
     signs = {
