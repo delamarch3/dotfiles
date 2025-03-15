@@ -112,6 +112,7 @@ local links = {
         "@lsp.type.namespace"
     },
     Normal = {
+        "Question",
         "@tag.attribute.vue"
     },
     Keyword = {
@@ -133,12 +134,14 @@ local links = {
     HTMLTag = {
         "htmlTagName",
         "htmlEndTag",
-
         "@tag.vue",
         "@tag.delimiter.vue"
     },
     HTMLString = {
         "@string.vue"
+    },
+    Special = {
+        "Title"
     }
 }
 
