@@ -78,7 +78,9 @@ local highlights = {
     QuickFixLine = { fg = "#D8D8D8" }, -- new light grey
 
     HTMLTag = { fg = "#E8BF6A" }, -- new orange/yellow
-    HTMLString = { fg = "#A5C261" } -- new lightgreen
+    HTMLString = { fg = "#A5C261" }, -- new lightgreen
+
+    Todo = { fg = "#A5C261" } -- new lightgreen
 }
 
 local links = {
@@ -93,7 +95,8 @@ local links = {
         "@type.builtin",
 
         "@lsp.type.enumMember.rust",
-        "@lsp.typemod.typeAlias"
+        "@lsp.typemod.typeAlias",
+        "@lsp.type.selfTypeKeyword.rust"
     },
     PreProc = {
         "@function.macro",

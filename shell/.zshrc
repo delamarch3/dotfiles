@@ -1,18 +1,19 @@
 PROMPT='%B%1~%b %# '
-# export PATH="$HOME/Library/Python/3.8/bin:$PATH"
-# export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 export PATH="$PATH:/usr/local/go/bin"
 export PATH="$PATH:$HOME/go/bin"
 export PATH="$PATH:/opt/homebrew/bin"
 export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$PATH:/opt/homebrew/opt/openjdk@17/bin"
 export PATH="$PATH:$HOME/bin"
-alias ll="ls -l"
 
 export HOMEBREW_NO_ANALYTICS=1
 
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-17.jdk/Contents/Home"
 
+export AWS_PROFILE="default"
+export AWS_DEFAULT_REGION="eu-west-2"
+
+alias ll="ls -l"
 alias tf="terraform"
 alias python="python3"
 alias pip="pip3"
@@ -21,6 +22,7 @@ alias t="tmux"
 alias tls="tmux ls"
 alias ta="tmux attach -t"
 alias got="go test ./... -race -cover"
+alias brewbundle="brew update && brew bundle install --cleanup --file=~/Brewfile"
 
 # use vi key bindings
 bindkey -v
@@ -48,8 +50,6 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-[ -f "/Users/subhan/.ghcup/env" ] && source "/Users/subhan/.ghcup/env" # ghcup-env
-
 # fd - cd to selected directory
 fd() {
   local dir
@@ -64,11 +64,8 @@ fh() {
 }
 
 strdiff() {
-    echo $1 > f1
-    echo $2 > f2
-    git diff --word-diff --word-diff-regex=. --no-index f1 f2
-    rm f1 f2
+  echo $1 > f1
+  echo $2 > f2
+  git diff --word-diff --word-diff-regex=. --no-index f1 f2
+  rm f1 f2
 }
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

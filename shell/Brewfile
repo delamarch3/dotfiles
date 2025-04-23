@@ -1,22 +1,18 @@
 brew "stow"
-
-brew "fd"
 brew "ripgrep"
 brew "fzf"
-
 brew "cmake"
 brew "ninja"
-
 brew "tmux"
 brew "neovim"
-
 brew "duckdb"
 brew "pgcli"
-
 brew "jdtls"
-brew "terraform-ls"
-
+brew "hashicorp/tap/terraform-ls"
 brew "openjdk@17"
 brew "r"
+brew "htop"
 
 cask "amethyst"
+# cask "alacritty"
+# cask "obsidian"

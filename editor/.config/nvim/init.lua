@@ -18,22 +18,19 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-    "nvim-treesitter/nvim-treesitter",
+    { "nvim-treesitter/nvim-treesitter", tag = "v0.9.3"  },
     "nvim-treesitter/nvim-treesitter-textobjects",
     "nvim-treesitter/nvim-treesitter-context",
     "nvim-lua/plenary.nvim",
-    -- {
-    --     "nvim-telescope/telescope.nvim", tag = "0.1.2",
-    --     dependencies = { "nvim-lua/plenary.nvim" }
-    -- },
-    "neovim/nvim-lspconfig",
-    "hrsh7th/nvim-cmp",
+    -- { "nvim-telescope/telescope.nvim", tag = "0.1.2" },
+    { "neovim/nvim-lspconfig", tag = "v1.7.0" },
+    { "hrsh7th/nvim-cmp", tag = "v0.0.2" },
     "hrsh7th/cmp-nvim-lsp",
-    "L3MON4D3/LuaSnip",
-    "lewis6991/gitsigns.nvim",
+    { "L3MON4D3/LuaSnip", tag = "v2.3.0" },
+    { "lewis6991/gitsigns.nvim", tag = "v1.0.2" },
     "nvim-lualine/lualine.nvim",
     { "j-hui/fidget.nvim", tag = "legacy" },
-    "numToStr/Comment.nvim",
+    { "numToStr/Comment.nvim", tag = "v0.8.0" },
     "christoomey/vim-tmux-navigator", -- Maps <C-w>l to <C-l> etc
     "ibhagwan/fzf-lua",
 })
@@ -46,7 +43,7 @@ vim.opt.showmode = false
 vim.opt.splitright = true -- Split onto new pane
 vim.opt.splitbelow = true
 vim.opt.guicursor = "a:blinkon10,i-ci:ver25,r-cr-o:hor20"
-vim.opt.cc = "100" -- Ruler
+vim.opt.colorcolumn = "100"
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 0
 vim.opt.expandtab = true
@@ -65,10 +62,10 @@ vim.keymap.set("i", "[<cr>", "[<cr>]<c-o><s-o>", { remap = false })
 vim.keymap.set("n", "<SPACE>", "<Nop>", { remap = false })
 vim.keymap.set("n", "<C-c>", "<Nop>", { remap = false })
  -- TODO: remove later:
-vim.keymap.set("v", "<C-f>", "<Nop>", { remap = false })
-vim.keymap.set("v", "<C-b>", "<Nop>", { remap = false })
-vim.keymap.set("n", "<C-f>", "<Nop>", { remap = false })
-vim.keymap.set("n", "<C-b>", "<Nop>", { remap = false })
+-- vim.keymap.set("v", "<C-f>", "<Nop>", { remap = false })
+-- vim.keymap.set("v", "<C-b>", "<Nop>", { remap = false })
+-- vim.keymap.set("n", "<C-f>", "<Nop>", { remap = false })
+-- vim.keymap.set("n", "<C-b>", "<Nop>", { remap = false })
 -- vim.keymap.set("n", "<leader><leader>l", "<Plug>NetrwRefresh", { remap = true }) -- vim-tmux-navigator/pull/393
 
 -- -- Telescope
@@ -376,7 +373,7 @@ require("fzf-lua").setup{
       }
   },
   buffers = {
-      keymap = { builtin = { ["<C-d>"] = false } },
+      -- keymap = { builtin = { ["<C-d>"] = "preview-page-down" } },
       actions = { ["ctrl-x"] = false, ["x"] = { actions.buf_del, actions.resume } },
   },
   grep = {
