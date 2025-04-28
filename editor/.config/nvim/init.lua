@@ -22,7 +22,6 @@ require("lazy").setup({
     "nvim-treesitter/nvim-treesitter-textobjects",
     "nvim-treesitter/nvim-treesitter-context",
     "nvim-lua/plenary.nvim",
-    -- { "nvim-telescope/telescope.nvim", tag = "0.1.2" },
     { "neovim/nvim-lspconfig", tag = "v1.7.0" },
     { "hrsh7th/nvim-cmp", tag = "v0.0.2" },
     "hrsh7th/cmp-nvim-lsp",
@@ -61,27 +60,11 @@ vim.keymap.set("i", "[<cr>", "[<cr>]<c-o><s-o>", { remap = false })
 -- Nops
 vim.keymap.set("n", "<SPACE>", "<Nop>", { remap = false })
 vim.keymap.set("n", "<C-c>", "<Nop>", { remap = false })
- -- TODO: remove later:
--- vim.keymap.set("v", "<C-f>", "<Nop>", { remap = false })
--- vim.keymap.set("v", "<C-b>", "<Nop>", { remap = false })
--- vim.keymap.set("n", "<C-f>", "<Nop>", { remap = false })
--- vim.keymap.set("n", "<C-b>", "<Nop>", { remap = false })
--- vim.keymap.set("n", "<leader><leader>l", "<Plug>NetrwRefresh", { remap = true }) -- vim-tmux-navigator/pull/393
-
--- -- Telescope
--- vim.keymap.set("n", "<leader>f", "<cmd>Telescope find_files<cr>", { remap = false })
--- vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers <cr>", { remap = false })
--- vim.keymap.set("n", "<leader>s", "<cmd>Telescope lsp_document_symbols<cr>", { remap = false })
--- vim.keymap.set("n", "<leader>S", "<cmd>Telescope lsp_workspace_symbols<cr>", { remap = false })
--- vim.keymap.set("n", "<leader>da", "<cmd>Telescope diagnostics bufnr=0 severity_bound=0<cr>", { remap = false })
--- vim.keymap.set("n", "<leader>de", "<cmd>Telescope diagnostics bufnr=0 severity=1<cr>", { remap = false })
--- vim.keymap.set("n", "<leader>DA", "<cmd>Telescope diagnostics severity_bound=0<cr>", { remap = false })
--- vim.keymap.set("n", "<leader>DE", "<cmd>Telescope diagnostics severity=1<cr>", { remap = false })
--- vim.keymap.set("n", "<leader>/", "<cmd>Telescope live_grep<cr>", { remap = false })
--- vim.keymap.set("n", "<leader>tr", "<cmd>Telescope resume<cr>", { remap = false })
--- vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", { remap = false })
--- vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<cr>", { remap = false })
--- vim.keymap.set("n", "gtd", "<cmd>Telescope lsp_type_definitions<cr>", { remap = false })
+vim.keymap.set("n", "grr", "<Nop>", { remap = false }) -- Default in nvim 11
+vim.keymap.set("n", "grn", "<Nop>", { remap = false }) -- Default in nvim 11
+vim.keymap.set("n", "gri", "<Nop>", { remap = false }) -- Default in nvim 11
+vim.keymap.set("n", "gO", "<Nop>", { remap = false })  -- Default in nvim 11
+vim.keymap.set("n", "gra", "<Nop>", { remap = false }) -- Default in nvim 11
 
 -- FZF
 vim.keymap.set("n", "<leader>f", "<cmd>FzfLua files<cr>", { remap = false })
@@ -102,13 +85,13 @@ vim.keymap.set("n", "gtd", "<cmd>FzfLua lsp_typedefs<cr>", { remap = false })
 vim.keymap.set("n", "<space>c", "<cmd>TSContextToggle<cr>", { remap = false })
 
 -- Diagnostics
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
+-- vim.keymap.set("n", "[d", vim.diagnostic.goto_prev) -- Default in nvim 11
+-- vim.keymap.set("n", "]d", vim.diagnostic.goto_next) -- Default in nvim 11
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
 
 -- Quickfix
-vim.keymap.set("n", "]q", "<cmd>cne<CR>")
-vim.keymap.set("n", "[q", "<cmd>cpr<CR>")
+-- vim.keymap.set("n", "]q", "<cmd>cne<CR>") -- Default in nvim 11
+-- vim.keymap.set("n", "[q", "<cmd>cpr<CR>") -- Default in nvim 11
 
 -- User commands
 vim.api.nvim_create_user_command("BufDeleteOthers", "%bd|e#", {})
@@ -253,7 +236,7 @@ require"nvim-treesitter.configs".setup {
 }
 
 require'treesitter-context'.setup{
-  enable = true,
+  enable = false,
   multiwindow = true,
   max_lines = 0,
   min_window_height = 0,
@@ -262,23 +245,6 @@ require'treesitter-context'.setup{
   trim_scope = 'outer',
   mode = 'cursor',
 }
-
--- local actions = require("telescope.actions")
--- require("telescope").setup({
---     defaults = {
---         mappings = {
---             n = {
---                 ["<Esc>"] = function() end,
---                 ["<C-c>"] = actions.close,
---             },
---         },
---         layout_strategy = "horizontal",
---         layout_config = {
---             prompt_position = "top",
---         },
---         sorting_strategy = "ascending",
---     },
--- })
 
 local actions = require("fzf-lua").actions
 require("fzf-lua").setup{
@@ -404,38 +370,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.api.nvim_command('autocmd CursorMoved <buffer> ++once set eventignore=""')
     end
 
-    vim.lsp.handlers['textDocument/signatureHelp'] = function(_, result, ctx, config)
-        if not result or not result.signatures then return end
-
-        -- Remove documentation to display the signature only
-        local filtered_result = vim.deepcopy(result)
-        for _, signature in ipairs(filtered_result.signatures) do
-            signature.documentation = nil
-        end
-
-        local opts = { focusable = false }
-        vim.lsp.handlers.signature_help(_, filtered_result, ctx, vim.tbl_extend('force', config or {}, opts))
-    end
-
-    local signature_help_enabled = false
-    local function toggle_signature_help()
-        local group_name = "SignatureHelp"
-
-        if signature_help_enabled then
-            vim.api.nvim_del_augroup_by_name(group_name)
-            signature_help_enabled = false
-        else
-            vim.api.nvim_create_augroup(group_name, { clear = true })
-            vim.api.nvim_create_autocmd("CursorHoldI", {
-                group = group_name,
-                callback = function()
-                    vim.lsp.buf.signature_help()
-                end,
-            })
-            signature_help_enabled = true
-        end
-    end
-
     -- Format on save
     local format_on_save_enabled = false
     local function toggle_format_on_save()
@@ -461,7 +395,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
     vim.keymap.set("n", "K", hover_fixed, opts)
-    vim.keymap.set("i", "<C-k>", toggle_signature_help, opts)
+    -- vim.keymap.set("i", "<C-k>", toggle_signature_help, opts) -- Use <ctrl-S> in nvim 11
     vim.keymap.set("n", "<space>r", vim.lsp.buf.rename, opts)
     vim.keymap.set({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, opts)
     vim.keymap.set("n", "<space>mm", function()
