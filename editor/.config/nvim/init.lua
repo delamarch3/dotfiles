@@ -22,7 +22,7 @@ require("lazy").setup({
     "nvim-treesitter/nvim-treesitter-textobjects",
     "nvim-treesitter/nvim-treesitter-context",
     "nvim-lua/plenary.nvim",
-    { "neovim/nvim-lspconfig", tag = "v1.7.0" },
+    { "neovim/nvim-lspconfig", tag = "v2.1.0" },
     { "hrsh7th/nvim-cmp", tag = "v0.0.2" },
     "hrsh7th/cmp-nvim-lsp",
     { "L3MON4D3/LuaSnip", tag = "v2.3.0" },
@@ -404,41 +404,42 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
--- TODO: Disable specific lsp tokens eg @lsp.type.enumMember.rust
-local lspconfig = require("lspconfig")
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-local servers = { "gopls", "clangd", "terraformls", "hls", "jdtls" }
-for _, lsp in ipairs(servers) do
-    lspconfig[lsp].setup {
-        capabilities = capabilities,
-    }
-end
+vim.lsp.config('*', {
+    capabilities = require("cmp_nvim_lsp").default_capabilities()
+})
 
--- https://rust-analyzer.github.io/manual.html#configuration
--- TODO: create a user command to add features per open project
-lspconfig["rust_analyzer"].setup {
-    capabilities = capabilities,
+vim.lsp.config("rust_analyzer", {
     settings = {
+        -- TODO: create a user command to add features per open project
+        -- TODO: Disable specific lsp tokens eg @lsp.type.enumMember.rust
+        -- https://rust-analyzer.github.io/manual.html#configuration
         ["rust-analyzer"] = {
             cargo = {
                 features = "all"
             }
         }
     }
-}
+})
 
-lspconfig["ts_ls"].setup {
-    capabilities = capabilities,
+vim.lsp.config("ts_ls", {
     on_attach = function(client, bufnr)
         client.server_capabilities.semanticTokensProvider = nil
     end,
-}
+})
 
 local is_npm_package_installed = require("util").is_npm_package_installed
-lspconfig["volar"].setup {
-    capabilities = capabilities,
+vim.lsp.config("volar", {
     filetypes = is_npm_package_installed "vue" and { "vue", "typescript", "javascript" } or { "vue" },
-}
+})
+
+vim.lsp.enable({
+    "rust_analyzer",
+    "gopls",
+    "clangd",
+    "terraformls",
+    "hls",
+    "jdtls"
+})
 
 -- TODO: move to builtin completion (vim.lsp.completion.enable), remove cmp and luasnip
 -- Weird cursor jumping with luasnip
