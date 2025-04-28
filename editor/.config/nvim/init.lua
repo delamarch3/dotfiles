@@ -399,7 +399,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<space>r", vim.lsp.buf.rename, opts)
     vim.keymap.set({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, opts)
     vim.keymap.set("n", "<space>mm", function()
-      vim.lsp.buf.format { async = true }
+        vim.lsp.buf.format { async = true }
     end, opts)
   end,
 })
@@ -409,9 +409,9 @@ local lspconfig = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 local servers = { "gopls", "clangd", "terraformls", "hls", "jdtls" }
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    capabilities = capabilities,
-  }
+    lspconfig[lsp].setup {
+        capabilities = capabilities,
+    }
 end
 
 -- https://rust-analyzer.github.io/manual.html#configuration
