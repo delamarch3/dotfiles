@@ -85,8 +85,8 @@ vim.keymap.set("n", "gtd", "<cmd>FzfLua lsp_typedefs<cr>", { remap = false })
 vim.keymap.set("n", "<space>c", "<cmd>TSContextToggle<cr>", { remap = false })
 
 -- Diagnostics
--- vim.keymap.set("n", "[d", vim.diagnostic.goto_prev) -- Default in nvim 11
--- vim.keymap.set("n", "]d", vim.diagnostic.goto_next) -- Default in nvim 11
+vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = 1, float = true }) end)
+vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = -1, float = true }) end)
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
 
 -- Quickfix
@@ -411,7 +411,6 @@ vim.lsp.config('*', {
 vim.lsp.config("rust_analyzer", {
     settings = {
         -- TODO: create a user command to add features per open project
-        -- TODO: Disable specific lsp tokens eg @lsp.type.enumMember.rust
         -- https://rust-analyzer.github.io/manual.html#configuration
         ["rust-analyzer"] = {
             cargo = {
