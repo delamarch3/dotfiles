@@ -23,15 +23,13 @@ require("lazy").setup({
     "nvim-treesitter/nvim-treesitter-context",
     "nvim-lua/plenary.nvim",
     { "neovim/nvim-lspconfig", tag = "v2.1.0" },
-    { "hrsh7th/nvim-cmp", tag = "v0.0.2" },
-    "hrsh7th/cmp-nvim-lsp",
-    { "L3MON4D3/LuaSnip", tag = "v2.3.0" },
     { "lewis6991/gitsigns.nvim", tag = "v1.0.2" },
     "nvim-lualine/lualine.nvim",
     { "j-hui/fidget.nvim", tag = "legacy" },
     { "numToStr/Comment.nvim", tag = "v0.8.0" },
     "christoomey/vim-tmux-navigator", -- Maps <C-w>l to <C-l> etc
     "ibhagwan/fzf-lua",
+    { "saghen/blink.cmp", tag = "v1.2.0" }
 })
 
 -- Options
@@ -51,6 +49,12 @@ vim.opt.smarttab = true
 vim.opt.number = true
 vim.g.mapleader = " "
 vim.opt.updatetime = 500 -- CursorHoldI
+vim.g.netrw_liststyle = 1
+vim.g.netrw_banner = 0
+vim.g.netrw_sizestyle = "H"
+vim.g.netrw_localrmdir = "rm -r"
+vim.g.netrw_localmkdir = "mkdir -p"
+vim.g.netrw_localcopydircmd = "cp -r"
 
 -- Close brackets automatically, with return:
 vim.keymap.set("i", "{<cr>", "{<cr>}<C-O><S-O>", { remap = false })
@@ -85,8 +89,8 @@ vim.keymap.set("n", "gtd", "<cmd>FzfLua lsp_typedefs<cr>", { remap = false })
 vim.keymap.set("n", "<space>c", "<cmd>TSContextToggle<cr>", { remap = false })
 
 -- Diagnostics
-vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = 1, float = true }) end)
-vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = -1, float = true }) end)
+vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end)
+vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end)
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
 
 -- Quickfix
@@ -109,7 +113,7 @@ end
 -- Highlight trailing whitespace
 local hlwhitespace = vim.api.nvim_create_augroup("hlwhitespace", { clear = true })
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
-    pattern = "*",
+    pattern = "*.*",
     group = hlwhitespace,
     callback = function()
         if not is_floating_window() then
@@ -405,7 +409,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 vim.lsp.config('*', {
-    capabilities = require("cmp_nvim_lsp").default_capabilities()
+    capabilities = require("blink.cmp").get_lsp_capabilities()
 })
 
 vim.lsp.config("rust_analyzer", {
@@ -440,58 +444,39 @@ vim.lsp.enable({
     "jdtls"
 })
 
--- TODO: move to builtin completion (vim.lsp.completion.enable), remove cmp and luasnip
--- Weird cursor jumping with luasnip
-vim.api.nvim_create_autocmd("ModeChanged", {
-  pattern = "*",
-  callback = function()
-    if ((vim.v.event.old_mode == "s" and vim.v.event.new_mode == "n") or vim.v.event.old_mode == "i")
-        and require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
-        and not require("luasnip").session.jump_active
-    then
-      require("luasnip").unlink_current()
-    end
-  end
-})
-
-local luasnip = require "luasnip"
-local cmp = require "cmp"
-cmp.setup {
-  snippet = {
-      expand = function(args)
-          luasnip.lsp_expand(args.body)
-      end,
-  },
-  mapping = cmp.mapping.preset.insert({
-    ["<C-u>"] = cmp.mapping.scroll_docs(-4), -- Up
-    ["<C-d>"] = cmp.mapping.scroll_docs(4), -- Down
-    ["<CR>"] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
+require("blink.cmp").setup({
+    keymap = {
+        preset = "none",
+        ["<Tab>"] = { "select_next" },
+        ["<S-Tab>"] = { "select_prev" },
+        ["<CR>"] = { "select_and_accept" },
+        ["<C-d>"] = { "scroll_documentation_down" },
+        ["<C-u>"] = { "scroll_documentation_up" }
     },
-    ["<Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
-    ["<S-Tab>"] = cmp.mapping(function(fallback)
-       if cmp.visible() then
-         cmp.select_prev_item()
-       elseif luasnip.jumpable(-1) then
-         luasnip.jump(-1)
-       else
-         fallback()
-       end
-     end, { "i", "s" }),
-   }),
-  -- Must press tab to select first suggestion:
-  preselect = cmp.PreselectMode.None,
-  sources = {
-    { name = "nvim_lsp" },
-    { name = "luasnip" },
-  },
-}
+    completion = {
+        trigger = {
+            show_on_keyword = true,
+        },
+        documentation = {
+            auto_show = true,
+            auto_show_delay_ms = 200,
+        },
+        menu = {
+            draw = {
+                treesitter = { 'lsp' },
+                columns = {
+                    { "label", "label_description", gap = 1 },
+                    { "kind", "source_name" }
+                }
+            }
+        }
+    },
+    sources = {
+      transform_items = function(_, items)
+          local cmp_types = require("blink.cmp.types")
+          return vim.tbl_filter(function(item)
+              return item.kind ~= cmp_types.CompletionItemKind.Keyword
+          end, items)
+      end,
+    }
+})

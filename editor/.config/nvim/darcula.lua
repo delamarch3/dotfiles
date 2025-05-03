@@ -63,9 +63,9 @@ local highlights = {
 
     NormalFloat = { fg = c.lightgrey, bg = c.darkgrey },
     Pmenu = { fg = c.lightgrey, bg = c.darkgrey },
-    PmenuSel = { fg = c.lightgrey, bg = "#113A5C" }, -- new blue
+    PmenuSel = { bg = "#113A5C" }, -- new blue
     PmenuSbar = { fg = c.darkgrey, bg = c.darkgrey },
-    -- PmenuThumb = { fg = "#616263", bg = "#616263" },
+    PmenuThumb = { fg = "#616263", bg = "#616263" }, -- new grey
 
     Visual = { bg = "#214283" }, -- another new blue
     Search = { bg = "#214283" },
@@ -145,6 +145,9 @@ local links = {
     },
     Special = {
         "Title"
+    },
+    TelescopeMatching = {
+        "netrwMarkFile"
     }
 }
 

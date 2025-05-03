@@ -29,26 +29,24 @@ bindkey -v
 export KEYTIMEOUT=1
 bindkey -v '^?' backward-delete-char
 
-# Change cursor shape for different vi modes.
-function zle-keymap-select {
-  if [[ ${KEYMAP} == vicmd ]] ||
-     [[ $1 = 'block' ]]; then
-    echo -ne '\e[1 q'
-  elif [[ ${KEYMAP} == main ]] ||
-       [[ ${KEYMAP} == viins ]] ||
-       [[ ${KEYMAP} = '' ]] ||
-       [[ $1 = 'beam' ]]; then
-    echo -ne '\e[5 q'
-  fi
+zle-keymap-select() {
+    case $KEYMAP in
+        vicmd)
+            echo -ne '\e[1 q'
+            ;;
+        main|viins)
+            echo -ne '\e[5 q'
+            ;;
+    esac
+
+    zle reset-prompt
 }
 zle -N zle-keymap-select
+
 zle-line-init() {
-    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-    echo -ne "\e[5 q"
+  zle-keymap-select
 }
 zle -N zle-line-init
-echo -ne '\e[5 q' # Use beam shape cursor on startup.
-preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
 # fd - cd to selected directory
 fd() {
@@ -63,7 +61,7 @@ fh() {
   eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
 }
 
-strdiff() {
+word-diff() {
   echo $1 > f1
   echo $2 > f2
   git diff --word-diff --word-diff-regex=. --no-index f1 f2
