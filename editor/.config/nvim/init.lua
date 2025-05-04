@@ -447,31 +447,38 @@ vim.lsp.enable({
 require("blink.cmp").setup({
     keymap = {
         preset = "none",
-        ["<Tab>"] = { "select_next" },
-        ["<S-Tab>"] = { "select_prev" },
-        ["<CR>"] = { "select_and_accept" },
-        ["<C-d>"] = { "scroll_documentation_down" },
-        ["<C-u>"] = { "scroll_documentation_up" }
+        ["<Tab>"] = { "select_next", "fallback" },
+        ["<S-Tab>"] = { "select_prev", "fallback" },
+        ["<CR>"] = { "select_and_accept", "fallback" },
+        ["<C-d>"] = { "scroll_documentation_down", "fallback" },
+        ["<C-u>"] = { "scroll_documentation_up", "fallback" }
     },
     completion = {
         trigger = {
-            show_on_keyword = true,
+            show_on_keyword = true
+        },
+        list = {
+            selection = {
+                preselect = false,
+                auto_insert = true
+            }
         },
         documentation = {
             auto_show = true,
-            auto_show_delay_ms = 200,
+            auto_show_delay_ms = 0
         },
         menu = {
+            auto_show = true,
             draw = {
-                treesitter = { 'lsp' },
                 columns = {
                     { "label", "label_description", gap = 1 },
-                    { "kind", "source_name" }
+                    { "kind" }
                 }
             }
         }
     },
     sources = {
+      default = { "lsp" },
       transform_items = function(_, items)
           local cmp_types = require("blink.cmp.types")
           return vim.tbl_filter(function(item)

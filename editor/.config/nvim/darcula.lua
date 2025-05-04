@@ -108,6 +108,7 @@ local links = {
 
         "@variable",
         "@variable.builtin",
+        "@lsp.typemod.variable"
     },
     Namespace = {
         -- "@module",
@@ -151,6 +152,10 @@ local links = {
     }
 }
 
+local unset = {
+    "SnippetTabstop"
+}
+
 local function set_highlights()
     for group, opts in pairs(highlights) do
         local gui_opts = {}
@@ -169,6 +174,12 @@ local function set_highlights()
     end
 end
 
+local function unset_highlights()
+    for _, group in ipairs(unset) do
+        vim.api.nvim_set_hl(0, group, {})
+    end
+end
+
 local function set_links()
     for linkto, groups in pairs(links) do
         for _, group in ipairs(groups) do
@@ -180,6 +191,7 @@ local function set_links()
 end
 
 function M.load()
+    unset_highlights()
     set_highlights()
     set_links()
 end
