@@ -471,8 +471,8 @@ require("blink.cmp").setup({
             auto_show = true,
             draw = {
                 columns = {
-                    { "label", "label_description", gap = 1 },
-                    { "kind" }
+                    { "label", "kind", gap = 1 },
+                    { "label_description" }
                 }
             }
         }

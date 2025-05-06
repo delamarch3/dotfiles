@@ -66,6 +66,7 @@ local highlights = {
     PmenuSel = { bg = "#113A5C" }, -- new blue
     PmenuSbar = { fg = c.darkgrey, bg = c.darkgrey },
     PmenuThumb = { fg = "#616263", bg = "#616263" }, -- new grey
+    PmenuKind = { fg = c.redorange, bg = c.darkgrey }, -- new grey
 
     Visual = { bg = "#214283" }, -- another new blue
     Search = { bg = "#214283" },

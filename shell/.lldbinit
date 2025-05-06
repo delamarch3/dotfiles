@@ -1,17 +1,8 @@
-command alias bsf breakpoint set -f %1 -l %2
-command alias bsn breakpoint set -n %1
+command alias bfl breakpoint set -f %1 -l %2
+command alias bn breakpoint set -n %1
 
 command alias bls breakpoint list
 command alias bw breakpoint write
 command alias br breakpoint read
 
-command alias step-in thread step-in
-command alias step-inst thread step-inst
-command alias step-inst-over thread step-inst-over
-command alias step-out thread step-out
-command alias step-over thread step-over
-command alias step-scripted thread step-scripted
-
-command alias sj step-in
-command alias sl step-over
-command alias sk step-out
+command alias f thread step-out # replaces `frame select`
