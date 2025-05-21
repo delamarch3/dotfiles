@@ -5,4 +5,4 @@ command alias bls breakpoint list
 command alias bw breakpoint write
 command alias br breakpoint read
 
-command alias f thread step-out # replaces `frame select`
+command alias f thread step-out # replaces frame select

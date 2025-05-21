@@ -449,7 +449,7 @@ require("blink.cmp").setup({
         preset = "none",
         ["<Tab>"] = { "select_next", "fallback" },
         ["<S-Tab>"] = { "select_prev", "fallback" },
-        ["<CR>"] = { "select_and_accept", "fallback" },
+        ["<CR>"] = { "accept", "fallback" },
         ["<C-d>"] = { "scroll_documentation_down", "fallback" },
         ["<C-u>"] = { "scroll_documentation_up", "fallback" }
     },
@@ -485,5 +485,8 @@ require("blink.cmp").setup({
               return item.kind ~= cmp_types.CompletionItemKind.Keyword
           end, items)
       end,
+    },
+    cmdline = {
+      enabled = false
     }
 })
