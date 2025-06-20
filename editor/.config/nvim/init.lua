@@ -40,13 +40,13 @@ vim.opt.showmode = false
 vim.opt.splitright = true -- Split onto new pane
 vim.opt.splitbelow = true
 vim.opt.guicursor = "a:blinkon10,i-ci:ver25,r-cr-o:hor20"
-vim.opt.colorcolumn = "100"
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 0
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
 vim.opt.smarttab = true
 vim.opt.number = true
+vim.opt.cursorline = true
 vim.g.mapleader = " "
 vim.opt.updatetime = 500 -- CursorHoldI
 vim.g.netrw_liststyle = 1
@@ -149,6 +149,16 @@ vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
         end
     end
 })
+
+-- Remove trailing whitespace
+vim.keymap.set('n', '<space>tw', function()
+  local view = vim.fn.winsaveview()
+  vim.cmd([[
+    keeppatterns %s/\s\+$//e
+  ]])
+  vim.fn.winrestview(view)
+  vim.cmd("write")
+end, { noremap = true, silent = true })
 
 -- Number toggle
 local numbertoggle = vim.api.nvim_create_augroup("numbertoggle", { clear = true })
@@ -441,7 +451,8 @@ vim.lsp.enable({
     "clangd",
     "terraformls",
     "hls",
-    "jdtls"
+    "jdtls",
+    "ocamllsp",
 })
 
 require("blink.cmp").setup({

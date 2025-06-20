@@ -7,7 +7,7 @@ end
 local function setup(colors)
   local theme = {
     normal = {
-      a = { fg = colors.fg, bg = colors.bg },
+      a = { fg = colors.bg, bg = colors.normal },
       b = { fg = colors.fg, bg = colors.bg },
       c = { fg = colors.fg, bg = colors.bg },
     },
@@ -38,15 +38,15 @@ end
 
 local function setup_default()
   return setup {
-    bg = '#2b2b2b',
+    bg = '#2B2D30',
     alt_bg = '#313335',
-    dark_fg = '#a9b7c6',
-    fg = '#a9b7c6',
+    dark_fg = '#bbbbbb',
+    fg = '#bbbbbb',
     light_fg = '#808080',
-    normal = '#70afbd',
-    insert = '#afc07e',
-    visual = '#b294bb',
-    replace = '#de935f',
+    normal = '#90a959',
+    insert = '#f4bf75',
+    visual = '#6a9fb5',
+    replace = '#ab4242',
   }
 end
 
