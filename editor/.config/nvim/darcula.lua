@@ -1,24 +1,27 @@
 local M = {}
 
 local c = {
-    bg = "#232525",
-    bg2 = "#2B2B2B",
-    fg = "#A9B7C6",
-    fg2 = "#606366",
+    bg = "#1E1F22",
+    bg2 = "#3D3F41", -- panels
+    bg3 = "#2B2D30", -- line hl
+    bg4 = "#2B2D30", -- menus
+    fg = "#A9B7C5",
     red = "#FF0000",
-    orange = "#FFA500",
-    redorange = "#CC7832",
+    red2 = "#BC5460", -- errors
+    orange = "#FFA500", -- functions
+    orange2 = "#BBB529", -- decorators
+    redorange = "#CC7832", -- keywords
     green = "#32CD32",
-    darkgreen = "#6A8759",
-    grey = "#808080",
-    darkgrey = "#46484A",
-    darkgrey2 = "#606366",
-    bluegrey = "#A9B7C6",
-    lightgrey = "#BBBBBB",
+    darkgreen = "#6A8759", -- strings
+    grey = "#808080", -- comments
     blue = "#6897BB",
     yellow = "#FFC66D",
+    yellow2 = "#AC9148", -- warnings
     white = "#FFFFFF",
     purple = "#9876AA",
+    cyan = "#4EADE5",
+    cyan2 = "#20999D",
+    lilac = "#658CC9"
 }
 
 local highlights = {
@@ -29,47 +32,49 @@ local highlights = {
     Operator = { fg = c.fg },
     Delimiter = { fg = c.fg },
     Type = { fg = c.fg },
-    Error = { fg = c.red },
+    Error = { fg = c.red2 },
     Warning = { fg = c.orange },
     Identifier = { fg = c.fg },
     Statement = { fg = c.redorange },
-    PreProc = { fg = c.redorange },
+    PreProc = { fg = c.cyan },
     Function = { fg = c.yellow },
     Keyword = { fg = c.redorange },
     Special = { fg = c.redorange },
     String = { fg = c.darkgreen },
-    Constant = { fg = c.blue },
+    Constant = { fg = c.purple },
     Number = { fg = c.blue },
-    Namespace = { fg = c.purple },
+    Namespace = { fg = c.fg },
 
-    SignColumn = { bg = c.bg2, fg = c.grey },
-    LineNr = { bg = c.bg2, fg = c.grey },
-    ColorColumn = { bg = c.bg2 },
-    StatusLine = { bg = c.bg2, fg = c.fg },
+    SignColumn = { bg = c.bg, fg = c.grey },
+    LineNr = { bg = c.bg, fg = c.grey },
+    ColorColumn = { bg = c.bg }, -- The ruler line
+    StatusLine = { bg = c.bg4, fg = c.fg },
+    CursorLine = { bg = c.bg3 },
+    CursorLineNr = { bg = c.bg3 },
 
-    DiagnosticError = { fg = c.red, bg = c.bg2 },
-    DiagnosticWarn = { fg = c.orange, bg = c.bg2 },
-    DiagnosticInfo = { fg = c.white, bg = c.bg2 },
-    DiagnosticHint = { fg = c.white, bg = c.bg2 },
+    DiagnosticError = { fg = c.red2, bg = c.bg },
+    DiagnosticWarn = { fg = c.yellow2, bg = c.bg },
+    DiagnosticInfo = { fg = c.lilac, bg = c.bg },
+    DiagnosticHint = { fg = c.lilac, bg = c.bg },
 
-    DiagnosticFloatingError = { fg = c.red, bg = c.darkgrey },
-    DiagnosticFloatingWarn = { fg = c.orange, bg = c.darkgrey },
-    DiagnosticFloatingInfo = { fg = c.white, bg = c.darkgrey },
-    DiagnosticFloatingHint = { fg = c.white, bg = c.darkgrey },
+    DiagnosticFloatingError = { fg = c.red2, bg = c.bg2 },
+    DiagnosticFloatingWarn = { fg = c.yellow2, bg = c.bg2 },
+    DiagnosticFloatingInfo = { fg = c.lilac, bg = c.bg2 },
+    DiagnosticFloatingHint = { fg = c.lilac, bg = c.bg2 },
 
-    GitSignsAdd    = { fg = c.green, bg = c.bg2 },
-    GitSignsChange = { fg = c.grey, bg = c.bg2 },
-    GitSignsDelete = { fg = c.red, bg = c.bg2 },
+    GitSignsAdd    = { fg = c.green, bg = c.bg },
+    GitSignsChange = { fg = c.grey, bg = c.bg },
+    GitSignsDelete = { fg = c.red, bg = c.bg },
 
-    NormalFloat = { fg = c.lightgrey, bg = c.darkgrey },
-    Pmenu = { fg = c.lightgrey, bg = c.darkgrey },
-    PmenuSel = { bg = "#113A5C" }, -- new blue
-    PmenuSbar = { fg = c.darkgrey, bg = c.darkgrey },
-    PmenuThumb = { fg = "#616263", bg = "#616263" }, -- new grey
-    PmenuKind = { fg = c.redorange, bg = c.darkgrey }, -- new grey
+    NormalFloat = { fg = c.fg, bg = c.bg2 },
+    Pmenu = { fg = c.fg, bg = c.bg4 },
+    PmenuSel = { bg = "#525457" }, -- new blue
+    PmenuSbar = { fg = c.bg4, bg = c.bg4 },
+    PmenuThumb = { fg = "#5D5E5F", bg = "#5D5E5F" }, -- new grey
+    PmenuKind = { fg = c.redorange, bg = c.bg4 },
 
     Visual = { bg = "#214283" }, -- another new blue
-    Search = { bg = "#214283" },
+    Search = { bg = "#32593D" },
 
     ExtraWhitespace = { bg = "#BC3F3C" }, -- new red
 
@@ -81,7 +86,10 @@ local highlights = {
     HTMLTag = { fg = "#E8BF6A" }, -- new orange/yellow
     HTMLString = { fg = "#A5C261" }, -- new lightgreen
 
-    Todo = { fg = "#A5C261" } -- new lightgreen
+    Todo = { fg = "#A5C261" }, -- new lightgreen
+
+    TypeParam = { fg = c.cyan2 },
+    Decorator = { fg = c.orange2 }
 }
 
 local links = {
@@ -94,25 +102,23 @@ local links = {
     Type = {
         "@type",
         "@type.builtin",
-
-        "@lsp.type.enumMember.rust",
         "@lsp.typemod.typeAlias",
-        "@lsp.type.selfTypeKeyword.rust"
+
+        "@constructor.ocaml"
     },
     PreProc = {
         "@function.macro",
         "@lsp.type.macro",
-        "@lsp.type.decorator"
     },
     Variable = {
         "htmlArg",
 
         "@variable",
         "@variable.builtin",
-        "@lsp.typemod.variable"
+        "@lsp.typemod.variable",
+        "@lsp.mod.declaration"
     },
     Namespace = {
-        -- "@module",
         "@namespace",
         "@lsp.type.namespace"
     },
@@ -134,7 +140,8 @@ local links = {
         "@lsp.mod.constant",
         "@lsp.typemod.variable.static",
         "@lsp.type.constParameter.rust",
-        "@lsp.typemod.variable.readonly.cpp"
+        "@lsp.typemod.variable.readonly.cpp",
+        "@lsp.typemod.enumMember"
     },
     HTMLTag = {
         "htmlTagName",
@@ -150,6 +157,28 @@ local links = {
     },
     TelescopeMatching = {
         "netrwMarkFile"
+    },
+    TypeParam = {
+        "@lsp.type.typeParameter",
+        "@lsp.typemod.typeParameter",
+        "@lsp.type.lifetime"
+    },
+    Decorator = {
+        "@lsp.type.decorator",
+        "@lsp.type.toolModule",
+
+        "@lsp.type.attributeBracket.rust",
+        "@lsp.type.builtinAttribute.rust"
+    },
+    Number = {
+        "@boolean"
+    },
+    Search = {
+        "CurSearch"
+    },
+    Statement = {
+        "@lsp.type.label",
+        "@lsp.typemod.label"
     }
 }
 
