@@ -353,8 +353,7 @@ require("fzf-lua").setup{
       }
   },
   buffers = {
-      -- keymap = { builtin = { ["<C-d>"] = "preview-page-down" } },
-      actions = { ["ctrl-x"] = false, ["x"] = { actions.buf_del, actions.resume } },
+      actions = { ["ctrl-x"] = { actions.buf_del, actions.resume } },
   },
   grep = {
       no_header = false
@@ -453,6 +452,7 @@ vim.lsp.enable({
     "hls",
     "jdtls",
     "ocamllsp",
+    "ts_ls"
 })
 
 require("blink.cmp").setup({
