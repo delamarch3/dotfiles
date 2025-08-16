@@ -13,7 +13,10 @@ export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-$JDK_VERSION.jdk/Con
 export AWS_PROFILE="default"
 export AWS_DEFAULT_REGION="eu-west-2"
 
-alias ll="ls -l"
+export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+alias ll="ls -lGFh"
+alias la="ls -laGFh"
+
 alias tf="terraform"
 alias python="python3.13"
 alias pip="pip3.13"
