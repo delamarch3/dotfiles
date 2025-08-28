@@ -107,6 +107,10 @@ vim.cmd([[
     cnoreabbrev cfp CopyFilePath
 ]])
 
+vim.o.autoread = true
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" --[[, "CursorHold", "CursorHoldI" --]] }, {
+  command = "checktime"
+})
 
 local function is_floating_window()
     local window_config = vim.api.nvim_win_get_config(0)
