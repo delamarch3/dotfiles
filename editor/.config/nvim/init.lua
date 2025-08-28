@@ -100,10 +100,13 @@ vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
 -- User commands
 vim.api.nvim_create_user_command("BufDeleteOthers", "%bd|e#", {})
 vim.api.nvim_create_user_command("BufDeleteAll", "%bd", {})
+vim.api.nvim_create_user_command("CopyFilePath", "let @+ = @%", {})
 vim.cmd([[
     cnoreabbrev bdo BufDeleteOthers
     cnoreabbrev bda BufDeleteAll
+    cnoreabbrev cfp CopyFilePath
 ]])
+
 
 local function is_floating_window()
     local window_config = vim.api.nvim_win_get_config(0)
