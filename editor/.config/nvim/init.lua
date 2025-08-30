@@ -101,10 +101,30 @@ vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
 vim.api.nvim_create_user_command("BufDeleteOthers", "%bd|e#", {})
 vim.api.nvim_create_user_command("BufDeleteAll", "%bd", {})
 vim.api.nvim_create_user_command("CopyFilePath", "let @+ = @%", {})
+
+vim.api.nvim_create_user_command("EditRelative", function(opts)
+    local path = vim.fn.expand("%:p:h")
+    vim.cmd.edit(vim.fn.fnameescape(path .. "/" .. opts.args))
+end, {
+  nargs = 1,
+  complete = function(arglead, _, _)
+    local path = vim.fn.expand("%:p:h")
+    local cwd = vim.fn.getcwd()
+
+    -- Temporarily change directory to avoid expanding the full path
+    vim.cmd("lcd " .. vim.fn.fnameescape(path))
+    local completion = vim.fn.getcompletion(arglead, "file")
+    vim.cmd("lcd " .. vim.fn.fnameescape(cwd))
+
+    return completion
+  end,
+})
+
 vim.cmd([[
     cnoreabbrev bdo BufDeleteOthers
     cnoreabbrev bda BufDeleteAll
     cnoreabbrev cfp CopyFilePath
+    cnoreabbrev er EditRelative
 ]])
 
 vim.o.autoread = true
@@ -149,7 +169,6 @@ vim.api.nvim_create_autocmd({ "InsertLeave" }, {
 vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
     pattern = "*",
     group = hlwhitespace,
-    -- command = "call clearmatches()"
     callback = function()
         if not is_floating_window() then
             vim.cmd([[call clearmatches()]])
@@ -433,7 +452,7 @@ vim.lsp.config("rust_analyzer", {
         -- https://rust-analyzer.github.io/manual.html#configuration
         ["rust-analyzer"] = {
             cargo = {
-                features = "all"
+                -- features = "all"
             }
         }
     }
