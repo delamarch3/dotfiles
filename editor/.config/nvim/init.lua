@@ -128,8 +128,13 @@ vim.cmd([[
 ]])
 
 vim.o.autoread = true
-vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" --[[, "CursorHold", "CursorHoldI" --]] }, {
-  command = "checktime"
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
+  callback = function()
+    -- some checks to avoid delaying command window
+    if vim.bo.buftype == "" and vim.fn.buflisted(0) == 1 then
+      vim.cmd("checktime")
+    end
+  end
 })
 
 local function is_floating_window()
