@@ -98,16 +98,7 @@ vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
 -- vim.keymap.set("n", "[q", "<cmd>cpr<CR>") -- Default in nvim 11
 
 -- User commands
-vim.api.nvim_create_user_command("BufDeleteOthers", "%bd|e#", {})
-vim.api.nvim_create_user_command("BufDeleteAll", "%bd", {})
-vim.api.nvim_create_user_command("CopyFilePath", "let @+ = @%", {})
-
-vim.api.nvim_create_user_command("EditRelative", function(opts)
-    local path = vim.fn.expand("%:p:h")
-    vim.cmd.edit(vim.fn.fnameescape(path .. "/" .. opts.args))
-end, {
-  nargs = 1,
-  complete = function(arglead, _, _)
+function relative_complete(arglead, _, _)
     local path = vim.fn.expand("%:p:h")
     local cwd = vim.fn.getcwd()
 
@@ -117,7 +108,35 @@ end, {
     vim.cmd("lcd " .. vim.fn.fnameescape(cwd))
 
     return completion
-  end,
+end
+
+vim.api.nvim_create_user_command("BufDeleteOthers", "%bd|e#", {})
+vim.api.nvim_create_user_command("BufDeleteAll", "%bd", {})
+vim.api.nvim_create_user_command("CopyFilePath", "let @+ = @%", {})
+
+vim.api.nvim_create_user_command("EditRelative", function(opts)
+    local path = vim.fn.expand("%:p:h")
+    vim.cmd.edit(vim.fn.fnameescape(path .. "/" .. opts.args))
+end, {
+    nargs = 1,
+    complete = relative_complete,
+})
+
+vim.api.nvim_create_user_command("Move", function(opts)
+    local path = vim.fn.expand("%:p:h")
+    local old = vim.fn.expand("%:p")
+    local new = vim.fn.fnamemodify(path .. "/" .. opts.args, ":p")
+
+    -- vim.loop.fs_rename would also work, but this handles renaming the current buffer too
+    vim.cmd.saveas(vim.fn.fnameescape(new))
+
+    if old ~= new then
+        os.remove(old)
+        vim.cmd.bwipeout({ args = { old } })
+    end
+end, {
+    nargs = 1,
+    complete = relative_complete,
 })
 
 vim.cmd([[
@@ -125,16 +144,14 @@ vim.cmd([[
     cnoreabbrev bda BufDeleteAll
     cnoreabbrev cfp CopyFilePath
     cnoreabbrev er EditRelative
+    cnoreabbrev mv Move
 ]])
 
 vim.o.autoread = true
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
-  callback = function()
-    -- some checks to avoid delaying command window
-    if vim.bo.buftype == "" and vim.fn.buflisted(0) == 1 then
-      vim.cmd("checktime")
+    callback = function()
+        vim.cmd("if mode() != 'c' | checktime | endif")
     end
-  end
 })
 
 local function is_floating_window()
