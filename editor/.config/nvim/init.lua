@@ -19,16 +19,16 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
     { "nvim-treesitter/nvim-treesitter", tag = "v0.9.3"  },
-    "nvim-treesitter/nvim-treesitter-textobjects",
-    "nvim-treesitter/nvim-treesitter-context",
+    { "nvim-treesitter/nvim-treesitter-textobjects", commit = "ed373482db797bbf71bdff37a15c7555a84dce47" },
+    { "nvim-treesitter/nvim-treesitter-context", commit = "6daca3ad780f045550b820f262002f35175a6c04" },
     "nvim-lua/plenary.nvim",
-    { "neovim/nvim-lspconfig", tag = "v2.1.0" },
+    { "neovim/nvim-lspconfig", tag = "v2.4.0" },
     { "lewis6991/gitsigns.nvim", tag = "v1.0.2" },
     "nvim-lualine/lualine.nvim",
-    { "j-hui/fidget.nvim", tag = "legacy" },
+    { "j-hui/fidget.nvim", tag = "v1.5.0" },
     { "numToStr/Comment.nvim", tag = "v0.8.0" },
     "christoomey/vim-tmux-navigator", -- Maps <C-w>l to <C-l> etc
-    "ibhagwan/fzf-lua",
+    { "ibhagwan/fzf-lua", tag = "0.7" },
     { "saghen/blink.cmp", tag = "v1.2.0" }
 })
 
