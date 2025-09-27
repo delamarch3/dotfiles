@@ -118,6 +118,11 @@ vim.api.nvim_create_user_command("BufDeleteExplore", function()
     vim.cmd("Explore ".. path)
     vim.cmd("bdelete " .. buf)
 end, {})
+vim.api.nvim_create_user_command("BufDeletePrevious", function()
+    local buf = vim.api.nvim_get_current_buf()
+    vim.cmd("bprevious")
+    vim.cmd("bdelete " .. buf)
+end, {})
 
 vim.api.nvim_create_user_command("CopyFilePath", "let @+ = @%", {})
 
@@ -150,6 +155,7 @@ vim.cmd([[
     cnoreabbrev bdo BufDeleteOthers
     cnoreabbrev bda BufDeleteAll
     cnoreabbrev bde BufDeleteExplore
+    cnoreabbrev bdp BufDeletePrevious
     cnoreabbrev cfp CopyFilePath
     cnoreabbrev er EditRelative
     cnoreabbrev mv Move
