@@ -489,9 +489,28 @@ vim.lsp.config("rust_analyzer", {
         ["rust-analyzer"] = {
             cargo = {
                 -- features = "all"
+            },
+            completion = {
+                callable = {
+                    snippets = "add_parentheses",
+                }
             }
         }
     }
+})
+
+vim.lsp.config("clangd", {
+    cmd = { "clangd", "--function-arg-placeholders=0" }
+})
+
+vim.lsp.config("jdtls", {
+  settings = {
+    java = {
+      completion = {
+        guessMethodArguments = "off",
+      },
+    },
+  }
 })
 
 vim.lsp.config("ts_ls", {
