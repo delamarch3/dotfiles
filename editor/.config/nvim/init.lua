@@ -47,6 +47,8 @@ vim.opt.shiftwidth = 4
 vim.opt.smarttab = true
 vim.opt.number = true
 vim.opt.cursorline = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
 vim.g.mapleader = " "
 vim.opt.updatetime = 500 -- CursorHoldI
 vim.g.netrw_liststyle = 1
@@ -321,8 +323,8 @@ require'treesitter-context'.setup{
   mode = 'cursor',
 }
 
-local actions = require("fzf-lua").actions
-require("fzf-lua").setup{
+local fzflua = require("fzf-lua")
+fzflua.setup{
   winopts = {
       preview = {
           winopts = { number = false }
@@ -345,10 +347,10 @@ require("fzf-lua").setup{
 
   actions = {
       files = {
-          ["default"] = actions.file_edit_or_qf,
-          ["ctrl-s"] = actions.file_split,
-          ["ctrl-v"] = actions.file_vsplit,
-          ["ctrl-h"] = actions.toggle_hidden,
+          ["default"] = fzflua.actions.file_edit_or_qf,
+          ["ctrl-s"] = fzflua.actions.file_split,
+          ["ctrl-v"] = fzflua.actions.file_vsplit,
+          ["ctrl-h"] = fzflua.actions.toggle_hidden,
       },
   },
 
@@ -414,12 +416,20 @@ require("fzf-lua").setup{
       }
   },
   buffers = {
-      actions = { ["ctrl-x"] = { actions.buf_del, actions.resume } },
+      actions = { ["ctrl-x"] = { fzflua.actions.buf_del, fzflua.actions.resume } },
   },
   grep = {
       no_header = false
   }
 }
+
+vim.api.nvim_create_user_command("GitStatus", function(opts)
+    fzflua.git_status()
+end, {})
+
+vim.api.nvim_create_user_command("GitBranch", function(opts)
+    fzflua.git_branches()
+end, {})
 
 require("gitsigns").setup({
     signs = {
