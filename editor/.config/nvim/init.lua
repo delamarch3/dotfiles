@@ -136,7 +136,7 @@ end, {
     complete = relative_complete,
 })
 
-vim.api.nvim_create_user_command("Move", function(opts)
+vim.api.nvim_create_user_command("Rename", function(opts)
     local path = vim.fn.expand("%:p:h")
     local old = vim.fn.expand("%:p")
     local new = vim.fn.fnamemodify(path .. "/" .. opts.args, ":p")
@@ -160,7 +160,7 @@ vim.cmd([[
     cnoreabbrev bdp BufDeletePrevious
     cnoreabbrev cfp CopyFilePath
     cnoreabbrev er EditRelative
-    cnoreabbrev mv Move
+    cnoreabbrev rn Rename
 ]])
 
 vim.o.autoread = true
