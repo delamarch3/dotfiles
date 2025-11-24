@@ -175,15 +175,21 @@ vim.api.nvim_create_user_command("Diff", function(opts)
     require("gitsigns").diffthis(branch)
 end, { nargs = "?" })
 
-vim.api.nvim_create_user_command("CloseDiff", function(opts)
-    vim.cmd("windo set nodiff")
-    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-        local name = vim.api.nvim_buf_get_name(buf)
-        if name:match("^gitsigns://") then
-            vim.api.nvim_buf_delete(buf, { force = true })
-        end
+vim.api.nvim_create_user_command("CloseDiff", function()
+    -- `set nodiff` does not properly clean the diff from the buffer
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+      if vim.api.nvim_win_get_option(win, "diff") then
+          vim.api.nvim_set_option_value("diff", false, { scope = "local", win = win })
+      end
+
+      -- Only close gitsigns buffers in the current tab
+      local buf = vim.api.nvim_win_get_buf(win)
+      local name = vim.api.nvim_buf_get_name(buf)
+      if name:match("^gitsigns://") then
+          vim.api.nvim_buf_delete(buf, { force = true })
+      end
     end
-end, { nargs = "?" })
+end, {})
 
 function get_github_url(opts)
     local root = vim.fn.trim(vim.fn.system("git rev-parse --show-toplevel"))
