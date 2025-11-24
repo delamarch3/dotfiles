@@ -163,7 +163,7 @@ function get_changed_files(rev)
     return files
 end
 
-vim.api.nvim_create_user_command("StartReview", function(opts)
+vim.api.nvim_create_user_command("Review", function(opts)
     local branch = opts.args ~= "" and opts.args or "main"
     for _, file in ipairs(get_changed_files(branch)) do
         vim.cmd("tabnew " .. file)
