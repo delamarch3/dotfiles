@@ -153,6 +153,71 @@ end, {
     complete = relative_complete,
 })
 
+function get_changed_files(rev)
+    local handle = io.popen("git diff --name-only " .. rev)
+    local files = {}
+    if handle then
+        for line in handle:lines() do table.insert(files, line) end
+        handle:close()
+    end
+    return files
+end
+
+vim.api.nvim_create_user_command("StartReview", function(opts)
+    local branch = opts.args ~= "" and opts.args or "main"
+    for _, file in ipairs(get_changed_files(branch)) do
+        vim.cmd("tabnew " .. file)
+    end
+end, { nargs = "?" })
+
+vim.api.nvim_create_user_command("Diff", function(opts)
+    local branch = opts.args ~= "" and opts.args or "main"
+    require("gitsigns").diffthis(branch)
+end, { nargs = "?" })
+
+vim.api.nvim_create_user_command("CloseDiff", function(opts)
+    vim.cmd("windo set nodiff")
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        local name = vim.api.nvim_buf_get_name(buf)
+        if name:match("^gitsigns://") then
+            vim.api.nvim_buf_delete(buf, { force = true })
+        end
+    end
+end, { nargs = "?" })
+
+function get_github_url(opts)
+    local root = vim.fn.trim(vim.fn.system("git rev-parse --show-toplevel"))
+    if root == "" then return end
+
+    local file = vim.fn.expand("%:p"):sub(#root + 2)
+
+    local remote = vim.fn.trim(vim.fn.system("git config --get remote.origin.url"))
+    if remote == "" then return end
+
+    if remote:match("^git@") then
+        remote = "https://" .. remote:gsub("^git@", ""):gsub(":", "/", 1)
+    end
+    remote = remote:gsub("%.git$", "")
+
+    local branch = opts.args ~= "" and opts.args or vim.fn.trim(vim.fn.system("git rev-parse --abbrev-ref HEAD"))
+
+    local startln = opts.range ~= 0 and opts.line1 or vim.fn.line(".")
+    local endln = opts.range ~= 0 and opts.line2 or startln
+    local lines = startln == endln and "L" .. startln or "L" .. startln .. "L" .. endln
+
+    return string.format("%s/blob/%s/%s#%s", remote, branch, file, lines)
+end
+
+vim.api.nvim_create_user_command("GithubOpen", function(opts)
+    local url = get_github_url(opts)
+    vim.fn.jobstart({ "open", url }, { detach = true })
+end, { nargs = "?", range = true })
+
+vim.api.nvim_create_user_command("GithubCopy", function(opts)
+    local url = get_github_url(opts)
+    vim.fn.setreg("+", url)
+end, { nargs = "?", range = true })
+
 vim.cmd([[
     cnoreabbrev bdo BufDeleteOthers
     cnoreabbrev bda BufDeleteAll
@@ -161,6 +226,8 @@ vim.cmd([[
     cnoreabbrev cfp CopyFilePath
     cnoreabbrev er EditRelative
     cnoreabbrev rn Rename
+    cnoreabbrev gho GithubOpen
+    cnoreabbrev ghc GithubCopy
 ]])
 
 vim.o.autoread = true
