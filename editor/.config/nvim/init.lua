@@ -178,9 +178,11 @@ end, { nargs = "?" })
 vim.api.nvim_create_user_command("CloseDiff", function()
     -- `set nodiff` does not properly clean the diff from the buffer
     for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-      if vim.api.nvim_win_get_option(win, "diff") then
-          vim.api.nvim_set_option_value("diff", false, { scope = "local", win = win })
-      end
+      vim.api.nvim_set_option_value("diff", false, { scope = "local", win = win })
+
+      -- Prevent splits from following each other
+      vim.api.nvim_set_option_value("scrollbind", false, { scope = "local", win = win })
+      vim.api.nvim_set_option_value("cursorbind", false, { scope = "local", win = win })
 
       -- Only close gitsigns buffers in the current tab
       local buf = vim.api.nvim_win_get_buf(win)
