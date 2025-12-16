@@ -112,8 +112,12 @@ function relative_complete(arglead, _, _)
     return completion
 end
 
-vim.api.nvim_create_user_command("BufDeleteOthers", "%bd|e#", {})
 vim.api.nvim_create_user_command("BufDeleteAll", "%bd", {})
+vim.api.nvim_create_user_command("BufDeleteOthers", function()
+    local view = vim.fn.winsaveview()
+    vim.cmd("%bd|e#")
+    vim.fn.winrestview(view)
+end, {})
 vim.api.nvim_create_user_command("BufDeleteExplore", function()
     local path = vim.fn.expand("%:p:h")
     local buf = vim.api.nvim_get_current_buf()
