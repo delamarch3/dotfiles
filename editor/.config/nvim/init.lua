@@ -95,6 +95,18 @@ vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1, float = t
 vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end)
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
 
+-- Convenient navigation mappings for insert mode
+vim.keymap.set("i", "<C-b>", "<Left>")
+vim.keymap.set("i", "<C-f>", "<Right>")
+vim.keymap.set("i", "<C-e>", "<End>")
+-- vim.keymap.set("i", "<C-a>", "<Home>")
+-- vim.keymap.set("i", "<M-b>", "<C-o>b")
+-- vim.keymap.set("i", "<M-f>", "<C-o>w")
+
+-- Git
+vim.keymap.set("n", "[h",  "<cmd>Gitsigns prev_hunk<cr>")
+vim.keymap.set("n", "]h", "<cmd>Gitsigns next_hunk<cr>")
+
 -- Quickfix
 -- vim.keymap.set("n", "]q", "<cmd>cne<CR>") -- Default in nvim 11
 -- vim.keymap.set("n", "[q", "<cmd>cpr<CR>") -- Default in nvim 11
@@ -195,6 +207,14 @@ vim.api.nvim_create_user_command("CloseDiff", function()
           vim.api.nvim_buf_delete(buf, { force = true })
       end
     end
+end, {})
+
+vim.api.nvim_create_user_command("ResetHunk", function(opts)
+    require("gitsigns").reset_hunk()
+end, {})
+
+vim.api.nvim_create_user_command("ResetBuffer", function(opts)
+    require("gitsigns").reset_buffer()
 end, {})
 
 function get_github_url(opts)
